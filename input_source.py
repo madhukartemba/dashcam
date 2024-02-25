@@ -7,6 +7,10 @@ class InputSource:
         try:
             sourceId = int(videoSource)
             self.capture = cv2.VideoCapture(sourceId)
+            if width is None or height is None:
+                raise Exception(
+                    "You need to provide the dimensions when using a camera"
+                )
         except:
             self.capture = cv2.VideoCapture(videoSource)
         self.image = None
@@ -47,6 +51,10 @@ class InputSource:
 
 
 if __name__ == "__main__":
-    inputSource = InputSource(1280, 720)
-    print(inputSource.width, inputSource.height)
-    inputSource.releaseCapture()
+    videoInputSource = InputSource("videos/journey.mp4")
+    print(videoInputSource.getDimensions(), videoInputSource.frameCount)
+    videoInputSource.releaseCapture()
+
+    cameraInputSource = InputSource(0, 1280, 720)
+    print(cameraInputSource.getDimensions())
+    cameraInputSource.releaseCapture()
