@@ -4,14 +4,14 @@ import cv2
 class InputSource:
     def __init__(self, videoSource, width=None, height=None) -> None:
         self.videoSource = videoSource
-        try:
+        if str(videoSource).isdigit():
             sourceId = int(videoSource)
             self.capture = cv2.VideoCapture(sourceId)
             if width is None or height is None:
                 raise Exception(
                     "You need to provide the dimensions when using a camera"
                 )
-        except:
+        else:
             self.capture = cv2.VideoCapture(videoSource)
         self.image = None
         self.frameCount = 0
