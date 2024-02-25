@@ -2,14 +2,18 @@ import cv2
 
 
 class InputSource:
-    def __init__(self, videoSource=0) -> None:
+    def __init__(self, videoSource, width=None, height=None) -> None:
         self.videoSource = videoSource
         self.capture = cv2.VideoCapture(videoSource)
         self.image = None
+        self.frameCount = 0
+        if width is not None and height is not None:
+            self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+            self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         self.openCaptureCheck()
-        self.width = self.capture.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.height = self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        pass
+        self.frameCount = int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT))
+        self.width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        self.height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     def isCaptureOpen(self):
         return self.capture.isOpened()
@@ -34,7 +38,11 @@ class InputSource:
     def releaseCapture(self):
         self.capture.release()
 
+    def getDimensions(self):
+        return (self.width, self.height)
+
 
 if __name__ == "__main__":
-    inputSource = InputSource("videos/journey.mp4")
+    inputSource = InputSource(1280, 720)
     print(inputSource.width, inputSource.height)
+    inputSource.releaseCapture()
