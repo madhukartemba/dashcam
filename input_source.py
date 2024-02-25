@@ -4,7 +4,11 @@ import cv2
 class InputSource:
     def __init__(self, videoSource, width=None, height=None) -> None:
         self.videoSource = videoSource
-        self.capture = cv2.VideoCapture(videoSource)
+        try:
+            sourceId = int(videoSource)
+            self.capture = cv2.VideoCapture(sourceId)
+        except Exception as e:
+            self.capture = cv2.VideoCapture(videoSource)
         self.image = None
         self.frameCount = 0
         if width is not None and height is not None:
