@@ -6,19 +6,22 @@ class InputSource:
         self.videoSource = videoSource
         self.capture = cv2.VideoCapture(videoSource)
         self.image = None
-        self.openCamera()
+        self.openCaptureCheck()
         self.width = self.capture.get(cv2.CAP_PROP_FRAME_WIDTH)
         self.height = self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
         pass
 
-    def openCamera(self):
-        if self.capture.isOpened() == False:
+    def isCaptureOpen(self):
+        return self.capture.isOpened()
+
+    def openCaptureCheck(self):
+        if self.isCaptureOpen() == False:
             raise Exception("Capture is not opened")
         pass
 
     def getImage(self):
 
-        self.openCamera()
+        self.openCaptureCheck()
 
         success, image = self.capture.read()
 
