@@ -88,11 +88,11 @@ def run(model: str, video_file: str, width: int, height: int, num_threads: int,
         print(f'\rProcessing frame {current_frame}/{frame_count} ({progress:.2f}%)', end='', flush=True)
 
         # Show the processed frame (optional)
-        # cv2.imshow('object_detector', image)
+        cv2.imshow('object_detector', image)
 
         # Stop the program if the ESC key is pressed.
-        # if cv2.waitKey(1) == 27:
-        #     break
+        if cv2.waitKey(1) == 27:
+            break
 
     cap.release()
     out.release()
@@ -108,7 +108,7 @@ def main():
         required=False,
         default='detect.tflite')
     parser.add_argument(
-        '--videoFile', help='Path to the input video file.', required=True)
+        '--inputFile', help='Path to the input video file.', required=True)
     parser.add_argument(
         '--frameWidth',
         help='Width of frame to capture from video.',
@@ -139,7 +139,7 @@ def main():
         required=True)
     args = parser.parse_args()
 
-    run(args.model, args.videoFile, args.frameWidth, args.frameHeight,
+    run(args.model, args.inputFile, args.frameWidth, args.frameHeight,
         args.numThreads, args.enableEdgeTPU, args.outputFile)
 
 
