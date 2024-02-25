@@ -7,7 +7,7 @@ class InputSource:
         try:
             sourceId = int(videoSource)
             self.capture = cv2.VideoCapture(sourceId)
-        except Exception as e:
+        except:
             self.capture = cv2.VideoCapture(videoSource)
         self.image = None
         self.frameCount = 0
