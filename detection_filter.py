@@ -13,7 +13,7 @@ class DetectionFilter:
         return area <= self.maxArea
 
     def filter(self, detectionResult: processor.DetectionResult):
-        return filter(self.filterFunction, detectionResult.detections)
+        return list(filter(self.filterFunction, detectionResult.detections))
 
 
 if __name__ == "__main__":

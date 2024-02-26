@@ -6,6 +6,13 @@ from video_maker import VideoMaker
 from inference_engine import InferenceEngine
 from detection_filter import DetectionFilter
 from final_decision import FinalDecision
+from labels import Labels, Label
+
+
+red = Label(0, "red")
+yellow = Label(1, "yellow")
+green = Label(2, "green")
+off = Label(3, "off")
 
 
 def run(
@@ -15,6 +22,7 @@ def run(
     height: int,
     numThreads: int,
     outputFile: str | None,
+    labels: Labels,
 ):
     if source == None:
         inputSource = InputSource(0, width, height)
@@ -26,16 +34,23 @@ def run(
     else:
         videoMaker = None
 
-    inferenceEngine = InferenceEngine(model, numThreads, score_threshold=0.1)
+    inferenceEngine = InferenceEngine(model, numThreads, score_threshold=0.3)
 
     detectionFilter = DetectionFilter(inputSource.width, inputSource.height)
+
+    finalDecision = FinalDecision([green.index, yellow.index, red.index, off.index])
 
     while inputSource.isCaptureOpen():
         image = inputSource.getImage()
 
         detectionResult = inferenceEngine.getDetections(image)
 
-        image = utils.visualize(image, detectionResult)
+        detections = detectionFilter.filter(detectionResult)
+
+        detection = finalDecision.getDecision(detections)
+
+        if detection != None:
+            image = utils.visualize(image, [detection])
 
         if videoMaker:
             videoMaker.writeFrame(image)
@@ -44,6 +59,7 @@ def run(
 
         if cv2.waitKey(1) == 27:
             break
+
     if videoMaker:
         videoMaker.releaseVideo()
     cv2.destroyAllWindows()
@@ -98,6 +114,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    labels = Labels()
+
+    labels.addLabels(red, yellow, green, off)
+
     run(
         args.model,
         args.source,
@@ -105,5 +125,6 @@ if __name__ == "__main__":
         args.height,
         args.numThreads,
         args.output,
+        labels,
     )
     pass

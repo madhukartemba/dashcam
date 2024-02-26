@@ -21,41 +21,38 @@ _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
 _FONT_SIZE = 1
 _FONT_THICKNESS = 1
-_TEXT_COLOR = (0, 0, 255)  # red
+_TEXT_COLOR = (0, 255, 0)  # red
 
 
 def visualize(
     image: np.ndarray,
-    detection_result: processor.DetectionResult,
+    detections: list[processor.Detection],
 ) -> np.ndarray:
-  """Draws bounding boxes on the input image and return it.
+    for detection in detections:
+        # Draw bounding_box
+        bbox = detection.bounding_box
+        start_point = bbox.origin_x, bbox.origin_y
+        end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
+        cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
 
-  Args:
-    image: The input RGB image.
-    detection_result: The list of all "Detection" entities to be visualize.
+        # Draw label and score
+        category = detection.categories[0]
+        category_name = category.category_name
+        probability = round(category.score, 2)
+        result_text = category_name + " (" + str(probability) + ")"
+        text_location = (_MARGIN + bbox.origin_x, _MARGIN + _ROW_SIZE + bbox.origin_y)
+        cv2.putText(
+            image,
+            result_text,
+            text_location,
+            cv2.FONT_HERSHEY_PLAIN,
+            _FONT_SIZE,
+            _TEXT_COLOR,
+            _FONT_THICKNESS,
+        )
 
-  Returns:
-    Image with bounding boxes.
-  """
-  for detection in detection_result.detections:
-    # Draw bounding_box
-    bbox = detection.bounding_box
-    start_point = bbox.origin_x, bbox.origin_y
-    end_point = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
-    cv2.rectangle(image, start_point, end_point, _TEXT_COLOR, 3)
-
-    # Draw label and score
-    category = detection.categories[0]
-    category_name = category.category_name
-    probability = round(category.score, 2)
-    result_text = category_name + ' (' + str(probability) + ')'
-    text_location = (_MARGIN + bbox.origin_x,
-                     _MARGIN + _ROW_SIZE + bbox.origin_y)
-    cv2.putText(image, result_text, text_location, cv2.FONT_HERSHEY_PLAIN,
-                _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
-
-  return image
+    return image
 
 
 def getCategory(detection: processor.Detection):
-        return detection.categories[0]
+    return detection.categories[0]
