@@ -70,7 +70,7 @@ def run(
     detectionFilter = DetectionFilter(inputSource.width, inputSource.height)
 
     finalDecision = FinalDecision(
-        [green.index, yellow.index, red.index, off.index], minCount=max(1, FPS / 2)
+        [green.index, yellow.index, red.index, off.index], minCount=max(1, FPS * 2/3)
     )
 
     actions = Actions(actionsDict, bufferSize=10 * FPS)
