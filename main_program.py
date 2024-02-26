@@ -10,6 +10,9 @@ from final_decision import FinalDecision
 from actions import Actions
 from labels import Labels, Label
 
+# Define the expected FPS
+FPS = 30
+
 # Define all the labels here
 red = Label(0, "red")
 yellow = Label(1, "yellow")
@@ -59,7 +62,7 @@ def run(
 
     finalDecision = FinalDecision([green.index, yellow.index, red.index, off.index])
 
-    actions = Actions(actionsDict)
+    actions = Actions(actionsDict, bufferSize=10 * FPS)
 
     while inputSource.isCaptureOpen():
         image = inputSource.getImage()
