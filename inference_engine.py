@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 
 
-class Detector:
+class InferenceEngine:
     def __init__(self, model, threads=2, score_threshold=0.5, max_results=3) -> None:
         base_options = core.BaseOptions(
             file_name=model, use_coral=False, num_threads=threads

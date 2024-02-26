@@ -55,3 +55,7 @@ def visualize(
                 _FONT_SIZE, _TEXT_COLOR, _FONT_THICKNESS)
 
   return image
+
+
+def getCategory(detection: processor.Detection):
+        return detection.categories[0]
