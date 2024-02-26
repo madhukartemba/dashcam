@@ -26,7 +26,7 @@ class InputSource:
         self.width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 0
-        self.last_time = time.time()
+        self.lastTime = time.time()
 
     def isCaptureOpen(self):
         return self.capture.isOpened()
@@ -48,10 +48,10 @@ class InputSource:
         self.image = image
 
         # Calculate FPS
-        current_time = time.time()
-        elapsed_time = current_time - self.last_time
-        self.fps = 1 / elapsed_time
-        self.last_time = current_time
+        currentTime = time.time()
+        elapsedTime = currentTime - self.lastTime
+        self.fps = 1 / elapsedTime
+        self.lastTime = currentTime
 
         return image
 
