@@ -13,8 +13,6 @@
 # limitations under the License.
 """Main script to run the object detection routine."""
 import argparse
-import sys
-import time
 
 import cv2
 from tflite_support.task import core
