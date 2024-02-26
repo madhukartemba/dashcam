@@ -15,13 +15,22 @@
 
 import cv2
 import numpy as np
+import pygame
 from tflite_support.task import processor
+
+# Initialize pygame mixer
+pygame.mixer.init()
 
 _MARGIN = 10  # pixels
 _ROW_SIZE = 10  # pixels
 _FONT_SIZE = 1
 _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 255, 0)  # red
+
+
+def playSound(source: str):
+    pygame.mixer.music.load(source)
+    pygame.mixer.music.play()
 
 
 def putText(

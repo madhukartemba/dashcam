@@ -11,7 +11,7 @@ from actions import Actions
 from labels import Labels, Label
 
 # Define the expected FPS
-FPS = 30
+FPS = 53
 
 # Define all the labels here
 red = Label(0, "red")
@@ -23,17 +23,26 @@ off = Label(3, "off")
 labels = Labels()
 labels.addLabels(red, yellow, green, off)
 
-
 # Define state change actions
 actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
-    (red.index, green.index): lambda: print("green light! (from red)"),
-    (yellow.index, green.index): lambda: print("green light! (from yellow)"),
-    (green.index, yellow.index): lambda: print("yellow light! (from green)"),
-    (None, yellow.index): lambda: print("yellow light! (from none)"),
-    (green.index, red.index): lambda: print("red light! (from green)"),
-    (yellow.index, red.index): lambda: print("red light! (from yellow)"),
-    (None, red.index): lambda: print("red light! (from none)"),
+    (red.index, green.index): lambda: utils.playSound("sounds/key24.mp3"),
+    (yellow.index, green.index): lambda: utils.playSound("sounds/key24.mp3"),
+    (green.index, yellow.index): lambda: utils.playSound("sounds/key21.mp3"),
+    (None, yellow.index): lambda: utils.playSound("sounds/key21.mp3"),
+    (green.index, red.index): lambda: utils.playSound("sounds/key18.mp3"),
+    (yellow.index, red.index): lambda: utils.playSound("sounds/key18.mp3"),
+    (None, red.index): lambda: utils.playSound("sounds/key18.mp3"),
 }
+
+# actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
+#     (red.index, green.index): lambda: print("green light! (from red)"),
+#     (yellow.index, green.index): lambda: print("green light! (from yellow)"),
+#     (green.index, yellow.index): lambda: print("yellow light! (from green)"),
+#     (None, yellow.index): lambda: print("yellow light! (from none)"),
+#     (green.index, red.index): lambda: print("red light! (from green)"),
+#     (yellow.index, red.index): lambda: print("red light! (from yellow)"),
+#     (None, red.index): lambda: print("red light! (from none)"),
+# }
 
 
 def run(
@@ -60,7 +69,9 @@ def run(
 
     detectionFilter = DetectionFilter(inputSource.width, inputSource.height)
 
-    finalDecision = FinalDecision([green.index, yellow.index, red.index, off.index])
+    finalDecision = FinalDecision(
+        [green.index, yellow.index, red.index, off.index], minCount=FPS
+    )
 
     actions = Actions(actionsDict, bufferSize=10 * FPS)
 
