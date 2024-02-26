@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, Callable
 
 
-class Action:
+class Actions:
     def __init__(
         self,
         actions: Dict[Tuple[int | None, int | None], Callable[[], None]],
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     }
 
     # Create an instance of the Action class
-    action_instance = Action(actions_dict)
+    action_instance = Actions(actions_dict)
 
     # Test the act method
     action_instance.act(1)  # This should do nothing
