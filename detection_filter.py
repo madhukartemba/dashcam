@@ -2,7 +2,7 @@ from tflite_support.task import processor
 
 
 class DetectionFilter:
-    def __init__(self, width: int, height: int, maxAreaDivisor: int = 8) -> None:
+    def __init__(self, width: int, height: int, maxAreaDivisor: int = 16) -> None:
         self.width = width
         self.height = height
         self.maxAreaDivisor = maxAreaDivisor

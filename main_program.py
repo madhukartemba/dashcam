@@ -8,11 +8,15 @@ from detection_filter import DetectionFilter
 from final_decision import FinalDecision
 from labels import Labels, Label
 
-
+# Define all the labels here
 red = Label(0, "red")
 yellow = Label(1, "yellow")
 green = Label(2, "green")
 off = Label(3, "off")
+
+# Add all of your labels here
+labels = Labels()
+labels.addLabels(red, yellow, green, off)
 
 
 def run(
@@ -113,10 +117,6 @@ if __name__ == "__main__":
         default=None,
     )
     args = parser.parse_args()
-
-    labels = Labels()
-
-    labels.addLabels(red, yellow, green, off)
 
     run(
         args.model,
