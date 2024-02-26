@@ -1,11 +1,13 @@
 import argparse
 import cv2
 import utils
+from typing import Dict, Tuple, Callable
 from input_source import InputSource
 from video_maker import VideoMaker
 from inference_engine import InferenceEngine
 from detection_filter import DetectionFilter
 from final_decision import FinalDecision
+from actions import Actions
 from labels import Labels, Label
 
 # Define all the labels here
@@ -14,9 +16,21 @@ yellow = Label(1, "yellow")
 green = Label(2, "green")
 off = Label(3, "off")
 
-# Add all of your labels here
+# Add all the labels here
 labels = Labels()
 labels.addLabels(red, yellow, green, off)
+
+
+# Define state change actions
+actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
+    (red.index, green.index): lambda: print("green light! (from red)"),
+    (yellow.index, green.index): lambda: print("green light! (from yellow)"),
+    (green.index, yellow.index): lambda: print("yellow light! (from green)"),
+    (None, yellow.index): lambda: print("yellow light! (from none)"),
+    (green.index, red.index): lambda: print("red light! (from green)"),
+    (yellow.index, red.index): lambda: print("red light! (from yellow)"),
+    (None, red.index): lambda: print("red light! (from none)"),
+}
 
 
 def run(
@@ -27,6 +41,7 @@ def run(
     numThreads: int,
     outputFile: str | None,
     labels: Labels,
+    actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])],
 ):
     if source == None:
         inputSource = InputSource(0, width, height)
@@ -44,6 +59,8 @@ def run(
 
     finalDecision = FinalDecision([green.index, yellow.index, red.index, off.index])
 
+    actions = Actions(actionsDict)
+
     while inputSource.isCaptureOpen():
         image = inputSource.getImage()
 
@@ -52,6 +69,10 @@ def run(
         detections = detectionFilter.filter(detectionResult)
 
         detection = finalDecision.getDecision(detections)
+
+        actions.act(
+            index=utils.getCategory(detection).index if detection is not None else None
+        )
 
         if detection != None:
             image = utils.visualize(image, [detection])
@@ -126,5 +147,6 @@ if __name__ == "__main__":
         args.numThreads,
         args.output,
         labels,
+        actionsDict,
     )
     pass

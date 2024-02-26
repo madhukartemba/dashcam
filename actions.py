@@ -5,15 +5,27 @@ class Actions:
     def __init__(
         self,
         actions: Dict[Tuple[int | None, int | None], Callable[[], None]],
+        bufferSize: int = 8,
         initialIndex: int | None = None,
     ) -> None:
         self.prevIndex = initialIndex
         self.actions = actions
+        self.noneCount = 0
+        self.bufferSize = bufferSize
 
-    def act(self, index):
+    def act(self, index: int | None):
+
         if (self.prevIndex, index) in self.actions:
             self.actions[(self.prevIndex, index)]()
-        self.prevIndex = index
+
+        if index == None:
+            self.noneCount += 1
+            if self.noneCount > self.bufferSize:
+                self.noneCount = self.bufferSize
+                self.prevIndex = None
+        else:
+            self.prevIndex = index
+            self.noneCount = 0
 
 
 if __name__ == "__main__":
@@ -37,5 +49,5 @@ if __name__ == "__main__":
     action_instance.act(1)  # This should do nothing
     action_instance.act(None)  # This will perform action2
     action_instance.act(None)  # This should do nothing
-    action_instance.act(0) # This should do nothing
-    action_instance.act(1) # This will perform action1
+    action_instance.act(0)  # This should do nothing
+    action_instance.act(1)  # This will perform action1
