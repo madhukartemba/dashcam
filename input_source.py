@@ -1,4 +1,5 @@
 import cv2
+import time
 
 
 class InputSource:
@@ -24,6 +25,8 @@ class InputSource:
         self.frameCount = int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT))
         self.width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.fps = 0
+        self.last_time = time.time()
 
     def isCaptureOpen(self):
         return self.capture.isOpened()
@@ -43,6 +46,13 @@ class InputSource:
             raise Exception("Capture failed")
 
         self.image = image
+
+        # Calculate FPS
+        current_time = time.time()
+        elapsed_time = current_time - self.last_time
+        self.fps = 1 / elapsed_time
+        self.last_time = current_time
+
         return image
 
     def releaseCapture(self):
@@ -50,6 +60,9 @@ class InputSource:
 
     def getDimensions(self):
         return (self.width, self.height)
+
+    def getFps(self):
+        return self.fps
 
 
 if __name__ == "__main__":

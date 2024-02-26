@@ -24,6 +24,25 @@ _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 255, 0)  # red
 
 
+def putText(
+    image: np.ndarray,
+    text,
+    text_location,
+    font_size=_FONT_SIZE,
+    text_color=_TEXT_COLOR,
+    font_thickness=_FONT_THICKNESS,
+):
+    cv2.putText(
+        image,
+        text,
+        text_location,
+        cv2.FONT_HERSHEY_PLAIN,
+        font_size,
+        text_color,
+        font_thickness,
+    )
+
+
 def visualize(
     image: np.ndarray,
     detections: list[processor.Detection],

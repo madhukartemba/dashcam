@@ -66,6 +66,7 @@ def run(
 
     while inputSource.isCaptureOpen():
         image = inputSource.getImage()
+        fps = inputSource.getFps()
 
         detectionResult = inferenceEngine.getDetections(image)
 
@@ -76,6 +77,10 @@ def run(
         actions.act(
             index=utils.getCategory(detection).index if detection is not None else None
         )
+
+        # Show FPS text
+        fps_text = "FPS = {:.1f}".format(fps)
+        utils.putText(image, fps_text, (24, 20))
 
         if detection != None:
             image = utils.visualize(image, [detection])
