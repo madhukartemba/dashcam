@@ -1,6 +1,6 @@
 import cv2
 import os
-import time
+import shutil
 import re
 from video_maker import VideoMaker
 
@@ -63,6 +63,8 @@ class VideoRecovery:
             videoMaker.writeFrame(image)
 
         videoMaker.releaseVideo()
+        shutil.rmtree(self.recoveryFolder, ignore_errors=True)
+        pass
 
 
 if __name__ == "__main__":
