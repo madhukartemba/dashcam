@@ -47,6 +47,9 @@ class Inference:
             image = self.inputSource.getImage()
             fps = self.inputSource.getFps()
 
+            self.finalDecision.updateMinCount(int(fps * 2 / 3))
+            self.actions.updateBufferSize(10 * fps)
+
             detectionResult = self.inferenceEngine.getDetections(image)
 
             detections = self.detectionFilter.filter(detectionResult)
