@@ -26,13 +26,6 @@ class Dashcam:
         self.fps = fps
         self.thread = None
         self.stopEvent = threading.Event()
-
-        # Start recovery as soon as dashcam class is created
-        self.videoRecovery = VideoRecovery(
-            self.recoveryFolder, self.outputFolder, self.fps
-        )
-        self.videoRecovery.recoverVideo()
-
         pass
 
     def record(self):
