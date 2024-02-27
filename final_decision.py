@@ -15,6 +15,9 @@ class FinalDecision:
             detections,
             key=lambda x: self.indexPriority.index(utils.getCategory(x).index),
         )
+    
+    def updateMinCount(self, minCount):
+        self.minCount = minCount
 
     def getDecision(self, detections: list[processor.Detection]):
 

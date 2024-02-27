@@ -13,6 +13,14 @@ class Actions:
         self.noneCount = 0
         self.bufferSize = bufferSize
 
+    def updateBufferSize(self, bufferSize):
+
+        if self.noneCount > bufferSize:
+            self.noneCount = self.bufferSize
+            self.prevIndex = None
+
+        self.bufferSize = bufferSize
+
     def act(self, index: int | None):
 
         if (self.prevIndex, index) in self.actions:

@@ -65,7 +65,7 @@ def run(
     else:
         videoMaker = None
 
-    inferenceEngine = InferenceEngine(model, numThreads, score_threshold=0.3)
+    inferenceEngine = InferenceEngine(model, numThreads, scoreThreshold=0.3)
 
     detectionFilter = DetectionFilter(inputSource.width, inputSource.height)
 
