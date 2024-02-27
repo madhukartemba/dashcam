@@ -2,15 +2,15 @@ import cv2
 
 
 class VideoMaker:
-    def __init__(self, output_file: str, width: int, height: int) -> None:
+    def __init__(self, outputFile: str, width: int, height: int, fps: float = 30.0) -> None:
         fourcc = cv2.VideoWriter_fourcc("m", "p", "4", "v")
-        if not output_file.endswith(".mp4"):
-            output_file = output_file + ".mp4"
-        self.output_file = output_file
+        if not outputFile.endswith(".mp4"):
+            outputFile = outputFile + ".mp4"
+        self.outputFile = outputFile
         self.width = width
         self.height = height
         self.out = cv2.VideoWriter(
-            self.output_file, fourcc, 30.0, (width, height), isColor=True
+            self.outputFile, fourcc, fps, (width, height), isColor=True
         )
 
     def writeFrame(self, image):

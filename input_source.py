@@ -49,6 +49,7 @@ class InputSource:
         self.stopEvent.set()
         if self.thread:
             self.thread.join()
+        self.releaseCapture()
 
     def captureFrames(self):
         while not self.stopEvent.is_set():

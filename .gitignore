@@ -1,5 +1,8 @@
 # Ignore the videos folder
 videos/
 
+# Ignore the outputs folder
+outputs/
+
 # Ignore pycache
 __pycache__
