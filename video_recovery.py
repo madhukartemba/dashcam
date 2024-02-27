@@ -44,25 +44,20 @@ class VideoRecovery:
             )
             return
 
-        sorted_files = list(
-            filter(
-                lambda x: str(x).endswith(".jpg"),
-                sorted(
-                    os.listdir(self.recoveryFolder), key=VideoRecovery.frameNumberSort
-                ),
-            )
+        sortedFiles = sorted(
+            filter(lambda x: str(x).endswith(".jpg"), os.listdir(self.recoveryFolder)),
+            key=VideoRecovery.frameNumberSort,
         )
 
         width, height = self.getFrameDimensions()
         firstTimestamp = str(
-            int(os.path.getmtime(os.path.join(self.recoveryFolder, sorted_files[0])))
+            int(os.path.getmtime(os.path.join(self.recoveryFolder, sortedFiles[0])))
         )
         outputFile = os.path.join(self.outputFolder, firstTimestamp)
 
         videoMaker = VideoMaker(outputFile, width, height, self.fps)
 
-        for file in sorted_files:
-            print(file)
+        for file in sortedFiles:
             image_path = os.path.join(self.recoveryFolder, file)
             image = cv2.imread(image_path)
             videoMaker.writeFrame(image)
