@@ -48,8 +48,8 @@ class VideoRecorder:
     def recovery(self):
         if not os.path.exists(self.recoveryFolder):
             os.makedirs(self.recoveryFolder)
-        frameCount = 0
         frameInterval = 1 / self.fps
+        frameCount = 0
         while not self.stopEvent.is_set():
             startTime = time.time()
 
@@ -58,9 +58,8 @@ class VideoRecorder:
             if image is None:
                 continue
 
-            cv2.imwrite(f"{self.recoveryFolder}/frame_{frameCount}.jpg", image)
             frameCount += 1
-
+            cv2.imwrite(f"{self.recoveryFolder}/{frameCount}.jpg", image)
             endTime = time.time()
             elapsedTime = endTime - startTime
             waitTime = max(0, frameInterval - elapsedTime)

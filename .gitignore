@@ -4,5 +4,8 @@ videos/
 # Ignore the outputs folder
 outputs/
 
+# Ignore the recovery folder
+recovery/
+
 # Ignore pycache
 __pycache__
