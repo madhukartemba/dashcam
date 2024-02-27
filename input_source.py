@@ -1,10 +1,15 @@
 import cv2
 import time
+import threading
+import utils
 
 
 class InputSource:
     def __init__(self, videoSource, width=None, height=None) -> None:
         self.videoSource = videoSource
+
+        self.thread = None
+        self.stopEvent = threading.Event()
 
         if str(videoSource).isdigit():
             sourceId = int(videoSource)
@@ -37,7 +42,16 @@ class InputSource:
         pass
 
     def run(self):
-        while self.isCaptureOpen():
+        self.thread = threading.Thread(target=self.captureFrames)
+        self.thread.start()
+
+    def stop(self):
+        self.stopEvent.set()
+        if self.thread:
+            self.thread.join()
+
+    def captureFrames(self):
+        while not self.stopEvent.is_set():
             self.refreshFrame()
 
     def refreshFrame(self):
@@ -75,8 +89,38 @@ class InputSource:
 if __name__ == "__main__":
     videoInputSource = InputSource("videos/journey.mp4")
     print(videoInputSource.getDimensions(), videoInputSource.frameCount)
-    videoInputSource.releaseCapture()
+    videoInputSource.run()
+    try:
+        while True:
+            image = videoInputSource.getImage()
+            if image is not None:
+                fps_text = "FPS = {:.1f}".format(videoInputSource.getFps())
+                utils.putText(image, fps_text, (24, 20))
+                cv2.imshow("Video", image)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+    except KeyboardInterrupt:
+        pass
+    finally:
+        videoInputSource.stop()
+        videoInputSource.releaseCapture()
+        cv2.destroyAllWindows()
 
     cameraInputSource = InputSource(0, 1280, 720)
     print(cameraInputSource.getDimensions())
-    cameraInputSource.releaseCapture()
+    cameraInputSource.run()
+    try:
+        while True:
+            image = cameraInputSource.getImage()
+            if image is not None:
+                fps_text = "FPS = {:.1f}".format(cameraInputSource.getFps())
+                utils.putText(image, fps_text, (24, 20))
+                cv2.imshow("Camera", image)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+    except KeyboardInterrupt:
+        pass
+    finally:
+        cameraInputSource.stop()
+        cameraInputSource.releaseCapture()
+        cv2.destroyAllWindows()
