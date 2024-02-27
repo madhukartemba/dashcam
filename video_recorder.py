@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # You can of course try with one :) it will be in fast forward
     # inputSource = InputSource("videos/journey.mp4")
 
-    inputSource.run()
+    inputSource.start()
 
     outputFilePath = "outputs/output_video_test.mp4"
     fps = 30.0

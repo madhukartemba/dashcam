@@ -10,6 +10,7 @@ class InputSource:
 
         self.thread = None
         self.stopEvent = threading.Event()
+        self.startedEvent = threading.Event()
 
         if str(videoSource).isdigit():
             sourceId = int(videoSource)
@@ -41,9 +42,10 @@ class InputSource:
             raise Exception("Capture is not opened")
         pass
 
-    def run(self):
+    def start(self):
         self.thread = threading.Thread(target=self.captureFrames)
         self.thread.start()
+        self.startedEvent.wait()
 
     def stop(self):
         self.stopEvent.set()
@@ -52,6 +54,8 @@ class InputSource:
         self.releaseCapture()
 
     def captureFrames(self):
+        self.refreshFrame()
+        self.startedEvent.set()
         while not self.stopEvent.is_set():
             self.refreshFrame()
 
@@ -90,7 +94,7 @@ class InputSource:
 if __name__ == "__main__":
     videoInputSource = InputSource("videos/journey.mp4")
     print(videoInputSource.getDimensions(), videoInputSource.frameCount)
-    videoInputSource.run()
+    videoInputSource.start()
     try:
         while True:
             image = videoInputSource.getImage()
@@ -109,7 +113,7 @@ if __name__ == "__main__":
 
     cameraInputSource = InputSource(0, 1280, 720)
     print(cameraInputSource.getDimensions())
-    cameraInputSource.run()
+    cameraInputSource.start()
     try:
         while True:
             image = cameraInputSource.getImage()
