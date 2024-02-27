@@ -48,7 +48,7 @@ if __name__ == "__main__":
     videoRecovery.recoverVideo()
 
     # Open input source
-    inputSource = InputSource(CAMERA_ID, WIDTH, HEIGHT)
+    inputSource = InputSource(CAMERA_ID, WIDTH, HEIGHT, FPS)
     inputSource.start()
 
     # Start up dashcam recording
