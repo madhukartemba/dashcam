@@ -69,6 +69,7 @@ class Inference:
                     image = utils.visualize(image, [detection])
 
                 cv2.imshow("Inference", image)
+                cv2.waitKey(1)
 
         if self.showPreview:
             cv2.destroyWindow("Inference")
