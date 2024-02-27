@@ -1,21 +1,30 @@
 import threading
 import time
+import os
+import cv2
+import shutil
 from input_source import InputSource
 from video_maker import VideoMaker
 
 
 class VideoRecorder:
     def __init__(
-        self, inputSource: InputSource, outputFile: str, fps: float = 30.0
+        self,
+        inputSource: InputSource,
+        outputFile: str,
+        fps: float = 30.0,
+        recoveryFolder: str = "recovery",
     ) -> None:
         self.inputSource = inputSource
         self.outputFile = outputFile
         self.fps = fps
+        self.recoveryFolder = recoveryFolder
         self.videoMaker = VideoMaker(
             outputFile, inputSource.width, inputSource.height, self.fps
         )
 
-        self.thread = None
+        self.mainThread = None
+        self.recoveryThread = None
         self.stopEvent = threading.Event()
         pass
 
@@ -36,15 +45,41 @@ class VideoRecorder:
             waitTime = max(0, frameInterval - elapsedTime)
             time.sleep(waitTime)
 
+    def recovery(self):
+        if not os.path.exists(self.recoveryFolder):
+            os.makedirs(self.recoveryFolder)
+        frameCount = 0
+        frameInterval = 1 / self.fps
+        while not self.stopEvent.is_set():
+            startTime = time.time()
+
+            image = self.inputSource.getImage()
+
+            if image is None:
+                continue
+
+            cv2.imwrite(f"{self.recoveryFolder}/frame_{frameCount}.jpg", image)
+            frameCount += 1
+
+            endTime = time.time()
+            elapsedTime = endTime - startTime
+            waitTime = max(0, frameInterval - elapsedTime)
+            time.sleep(waitTime)
+
     def start(self):
-        self.thread = threading.Thread(target=self.recordVideo)
-        self.thread.start()
+        self.mainThread = threading.Thread(target=self.recordVideo)
+        self.mainThread.start()
+        self.recoveryThread = threading.Thread(target=self.recovery)
+        self.recoveryThread.start()
 
     def stop(self):
         self.stopEvent.set()
-        if self.thread:
-            self.thread.join()
+        if self.mainThread:
+            self.mainThread.join()
+        if self.recoveryThread:
+            self.recoveryThread.join()
         self.videoMaker.releaseVideo()
+        shutil.rmtree(self.recoveryFolder, ignore_errors=True)
 
 
 if __name__ == "__main__":
