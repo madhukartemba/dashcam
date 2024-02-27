@@ -1,15 +1,42 @@
+import utils
+from labels import Label
 from video_recovery import VideoRecovery
 from input_source import InputSource
 from dashcam import Dashcam
+from inference import Inference
 
 
-RECOVERY_FOLDER = 'recovery'
-OUTPUT_FOLDER = 'recordings'
+RECOVERY_FOLDER = "recovery"
+OUTPUT_FOLDER = "recordings"
 FPS = 30.0
 CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
 FILE_DURATION = 600
+
+# Labels
+RED = Label(0, "red")
+YELLOW = Label(1, "yellow")
+GREEN = Label(2, "green")
+OFF = Label(3, "off")
+
+# Inference
+MODEL = "traffic_light.tflite"
+SCORE_THRESHOLD = 0.4
+MAX_RESULTS = 3
+NUM_THREADS = 2
+
+# Actions
+ACTIONS_DICT = {
+    (RED.index, GREEN.index): lambda: utils.playSound("sounds/key24.mp3"),
+    (YELLOW.index, GREEN.index): lambda: utils.playSound("sounds/key24.mp3"),
+    (GREEN.index, YELLOW.index): lambda: utils.playSound("sounds/key21.mp3"),
+    (None, YELLOW.index): lambda: utils.playSound("sounds/key21.mp3"),
+    (GREEN.index, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
+    (YELLOW.index, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
+    (None, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
+}
+
 
 if __name__ == "__main__":
 
@@ -25,4 +52,15 @@ if __name__ == "__main__":
     dashcam = Dashcam(inputSource, FILE_DURATION, OUTPUT_FOLDER, RECOVERY_FOLDER, FPS)
     dashcam.start()
 
-    
+    # Start inference
+    inference = Inference(
+        inputSource,
+        [GREEN.index, YELLOW.index, RED.index, OFF.index],
+        MODEL,
+        SCORE_THRESHOLD,
+        MAX_RESULTS,
+        NUM_THREADS,
+        ACTIONS_DICT,
+        showPreview=True,
+    )
+    inference.start()
