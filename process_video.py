@@ -71,7 +71,7 @@ def run(
     # Continuously capture frames from the video and run inference
     while inputSource.isCaptureOpen():
 
-        image = inputSource.getImage()
+        image = inputSource.refreshFrame()
 
         # Convert the image from BGR to RGB as required by the TFLite model.
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

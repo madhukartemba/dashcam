@@ -76,7 +76,7 @@ def run(
     actions = Actions(actionsDict, bufferSize=10 * FPS)
 
     while inputSource.isCaptureOpen():
-        image = inputSource.getImage()
+        image = inputSource.refreshFrame()
         fps = inputSource.getFps()
 
         detectionResult = inferenceEngine.getDetections(image)

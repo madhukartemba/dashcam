@@ -36,7 +36,11 @@ class InputSource:
             raise Exception("Capture is not opened")
         pass
 
-    def getImage(self):
+    def run(self):
+        while self.isCaptureOpen():
+            self.refreshFrame()
+
+    def refreshFrame(self):
 
         self.openCaptureCheck()
 
@@ -54,6 +58,9 @@ class InputSource:
         self.lastTime = currentTime
 
         return image
+
+    def getImage(self):
+        return self.image
 
     def releaseCapture(self):
         self.capture.release()
