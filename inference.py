@@ -70,9 +70,6 @@ class Inference:
 
                 cv2.imshow("Inference", image)
 
-                if cv2.waitKey(1) == 27:
-                    break
-
         if self.showPreview:
             cv2.destroyWindow("Inference")
         pass

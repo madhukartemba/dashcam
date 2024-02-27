@@ -6,13 +6,16 @@ from dashcam import Dashcam
 from inference import Inference
 
 
+# File config
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
+FILE_DURATION = 600
+
+# Input Source
 FPS = 30.0
 CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
-FILE_DURATION = 600
 
 # Labels
 RED = Label(0, "red")
@@ -64,3 +67,15 @@ if __name__ == "__main__":
         showPreview=True,
     )
     inference.start()
+
+    # Keep the program running until the user types "stop"
+    while True:
+        user_input = input("Type 'stop' to exit...\n")
+        if user_input.lower() == "stop":
+            break
+
+    # Close all the threads
+    inference.stop()
+    dashcam.stop()
+    inputSource.stop()
+    pass
