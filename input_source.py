@@ -5,7 +5,7 @@ import utils
 
 
 class InputSource:
-    def __init__(self, videoSource, width=None, height=None) -> None:
+    def __init__(self, videoSource, width=None, height=None, maxFps=30.0) -> None:
         self.videoSource = videoSource
 
         self.thread = None
@@ -32,6 +32,7 @@ class InputSource:
         self.width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 0
+        self.maxFps = maxFps
         self.lastTime = time.time()
 
     def isCaptureOpen(self):
@@ -56,8 +57,14 @@ class InputSource:
     def captureFrames(self):
         self.refreshFrame()
         self.startedEvent.set()
+        frameInterval = 1/self.maxFps
         while not self.stopEvent.is_set():
+            startTime = time.time()
             self.refreshFrame()
+            endTime = time.time()
+            elapsedTime = endTime - startTime
+            waitTime = max(0, frameInterval - elapsedTime)
+            time.sleep(waitTime)
 
     def refreshFrame(self):
 

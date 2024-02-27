@@ -82,9 +82,7 @@ class VideoRecorder:
 
 
 if __name__ == "__main__":
-    # Use with a camera source as video source will not be in sync!
     inputSource = InputSource(0, 1280, 720)
-    # You can of course try with one :) it will be in fast forward
     # inputSource = InputSource("videos/journey.mp4")
 
     inputSource.start()
