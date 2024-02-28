@@ -53,17 +53,26 @@ class VideoRecovery:
         firstTimestamp = str(
             int(os.path.getmtime(os.path.join(self.recoveryFolder, sortedFiles[0])))
         )
+
+        print("\nStarting recovery...")
+
         outputFile = os.path.join(self.outputFolder, firstTimestamp)
 
         videoMaker = VideoMaker(outputFile, width, height, self.fps)
 
-        for file in sortedFiles:
+        total_files = len(sortedFiles)
+
+        for i, file in enumerate(sortedFiles, start=1):
             image_path = os.path.join(self.recoveryFolder, file)
             image = cv2.imread(image_path)
             videoMaker.writeFrame(image)
 
+            progress = i / total_files * 100
+            print(f"\rProgress: {progress:.2f}%", end="", flush=True)
+
         videoMaker.releaseVideo()
         shutil.rmtree(self.recoveryFolder, ignore_errors=True)
+        print("\nRecovery completed.\n")
         pass
 
 

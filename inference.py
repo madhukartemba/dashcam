@@ -1,4 +1,4 @@
-import argparse
+import time
 import cv2
 import utils
 import threading
@@ -40,6 +40,8 @@ class Inference:
 
         self.actions = Actions(actionsDict)
 
+        self.fpsLastTime = time.time()
+
         pass
 
     def run(self):
@@ -51,7 +53,9 @@ class Inference:
 
     def infer(self):
         image = self.inputSource.getImage()
-        fps = self.inputSource.getFps()
+        currentTime = time.time()
+        fps = 1 / (currentTime - self.fpsLastTime)
+        self.fpsLastTime = currentTime
 
         self.finalDecision.updateMinCount(int(fps * 2 / 3))
         self.actions.updateBufferSize(10 * fps)
