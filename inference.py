@@ -44,39 +44,43 @@ class Inference:
 
     def run(self):
         while not self.stopEvent.is_set():
-            image = self.inputSource.getImage()
-            fps = self.inputSource.getFps()
+            self.infer()
 
-            self.finalDecision.updateMinCount(int(fps * 2 / 3))
-            self.actions.updateBufferSize(10 * fps)
+        self.destroyWindow()
+        pass
 
-            detectionResult = self.inferenceEngine.getDetections(image)
+    def infer(self):
+        image = self.inputSource.getImage()
+        fps = self.inputSource.getFps()
 
-            detections = self.detectionFilter.filter(detectionResult)
+        self.finalDecision.updateMinCount(int(fps * 2 / 3))
+        self.actions.updateBufferSize(10 * fps)
 
-            detection = self.finalDecision.getDecision(detections)
+        detectionResult = self.inferenceEngine.getDetections(image)
 
-            self.actions.act(
-                index=(
-                    utils.getCategory(detection).index
-                    if detection is not None
-                    else None
-                )
+        detections = self.detectionFilter.filter(detectionResult)
+
+        detection = self.finalDecision.getDecision(detections)
+
+        self.actions.act(
+            index=(
+                utils.getCategory(detection).index if detection is not None else None
             )
-
-            if self.showPreview:
-                fps_text = "FPS = {:.1f}".format(fps)
-                utils.putText(image, fps_text, (24, 20))
-
-                if detection != None:
-                    image = utils.visualize(image, [detection])
-
-                cv2.imshow("Inference", image)
-                cv2.waitKey(1)
+        )
 
         if self.showPreview:
+            fps_text = "FPS = {:.1f}".format(fps)
+            utils.putText(image, fps_text, (24, 20))
+
+            if detection != None:
+                image = utils.visualize(image, [detection])
+
+            cv2.imshow("Inference", image)
+            cv2.waitKey(1)
+
+    def destroyWindow(self):
+        if self.showPreview:
             cv2.destroyWindow("Inference")
-        pass
 
     def start(self):
         self.thread = threading.Thread(target=self.run)

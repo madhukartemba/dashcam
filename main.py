@@ -66,16 +66,17 @@ if __name__ == "__main__":
         ACTIONS_DICT,
         showPreview=True,
     )
-    inference.start()
 
-    # Keep the program running until the user types "stop"
-    while True:
-        user_input = input("Type 'stop' to exit...\n")
-        if user_input.lower() == "stop":
-            break
+    try:
+        while True:
+            inference.infer()
 
-    # Close all the threads
-    inference.stop()
-    dashcam.stop()
-    inputSource.stop()
+    except Exception as e:
+        print(e)
+    finally:
+        inference.destroyWindow()
+        inference.stop()
+        dashcam.stop()
+        inputSource.stop()
+
     pass
