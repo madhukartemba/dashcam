@@ -64,8 +64,12 @@ class VideoRecovery:
 
         for i, file in enumerate(sortedFiles, start=1):
             image_path = os.path.join(self.recoveryFolder, file)
-            image = cv2.imread(image_path)
-            videoMaker.writeFrame(image)
+            try:
+                image = cv2.imread(image_path)
+                videoMaker.writeFrame(image)
+            except Exception as e:
+                print(f"Exception occured while processing image {image_path}")
+                print(e)
 
             progress = i / total_files * 100
             print(f"\rProgress: {progress:.2f}%", end="", flush=True)
