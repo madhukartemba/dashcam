@@ -1,7 +1,6 @@
 import argparse
 import cv2
 import utils
-from typing import Dict, Tuple, Callable
 from input_source import InputSource
 from video_maker import VideoMaker
 from inference_engine import InferenceEngine
@@ -24,7 +23,7 @@ labels = Labels()
 labels.addLabels(red, yellow, green, off)
 
 # Define state change actions
-actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
+actionsDict = {
     (red.index, green.index): lambda: utils.playSound("sounds/key24.mp3"),
     (yellow.index, green.index): lambda: utils.playSound("sounds/key24.mp3"),
     (green.index, yellow.index): lambda: utils.playSound("sounds/key21.mp3"),
@@ -34,7 +33,7 @@ actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
     (None, red.index): lambda: utils.playSound("sounds/key18.mp3"),
 }
 
-# actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
+# actionsDict = {
 #     (red.index, green.index): lambda: print("green light! (from red)"),
 #     (yellow.index, green.index): lambda: print("green light! (from yellow)"),
 #     (green.index, yellow.index): lambda: print("yellow light! (from green)"),
@@ -53,7 +52,7 @@ def run(
     numThreads: int,
     outputFile: str | None,
     labels: Labels,
-    actionsDict: Dict[Tuple[int | None, int | None], (Callable[[], None])],
+    actionsDict,
 ):
     if source == None:
         inputSource = InputSource(0, width, height)
@@ -70,7 +69,7 @@ def run(
     detectionFilter = DetectionFilter(inputSource.width, inputSource.height)
 
     finalDecision = FinalDecision(
-        [green.index, yellow.index, red.index, off.index], minCount=max(1, FPS * 2/3)
+        [green.index, yellow.index, red.index, off.index], minCount=max(1, FPS * 2 / 3)
     )
 
     actions = Actions(actionsDict, bufferSize=10 * FPS)

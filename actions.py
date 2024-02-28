@@ -1,12 +1,9 @@
-from typing import Dict, Tuple, Callable
-
-
 class Actions:
     def __init__(
         self,
-        actions: Dict[Tuple[int | None, int | None], Callable[[], None]],
+        actions,
         bufferSize: int = 8,
-        initialIndex: int | None = None,
+        initialIndex: int = None,
     ) -> None:
         self.prevIndex = initialIndex
         self.actions = actions
@@ -21,7 +18,7 @@ class Actions:
 
         self.bufferSize = bufferSize
 
-    def act(self, index: int | None):
+    def act(self, index: int):
 
         if (self.prevIndex, index) in self.actions:
             self.actions[(self.prevIndex, index)]()
@@ -45,7 +42,7 @@ if __name__ == "__main__":
         print("Performing action 2...")
 
     # Define a dictionary of actions
-    actions_dict: Dict[Tuple[int | None, int | None], (Callable[[], None])] = {
+    actions_dict = {
         (0, 1): action1,
         (1, None): action2,
     }
