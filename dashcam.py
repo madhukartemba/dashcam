@@ -2,14 +2,14 @@ import time
 import os
 import threading
 from input_source import InputSource
+from process_input_source import ProcessInputSource
 from video_recorder import VideoRecorder
-from video_recovery import VideoRecovery
 
 
 class Dashcam:
     def __init__(
         self,
-        inputSource: InputSource,
+        inputSource: InputSource | ProcessInputSource,
         fileDuration=600,
         outputFolder="recordings",
         recoveryFolder="recovery",

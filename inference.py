@@ -3,6 +3,7 @@ import cv2
 import utils
 import threading
 from input_source import InputSource
+from process_input_source import ProcessInputSource
 from inference_engine import InferenceEngine
 from detection_filter import DetectionFilter
 from final_decision import FinalDecision
@@ -12,7 +13,7 @@ from actions import Actions
 class Inference:
     def __init__(
         self,
-        inputSource: InputSource,
+        inputSource: InputSource | ProcessInputSource,
         indexPriority,
         model,
         scoreThreshold,
