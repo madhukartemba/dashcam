@@ -16,6 +16,7 @@ class ProcessInputSource:
         self.frameRequestEvent = multiprocessing.Event()
         self.frameReadyEvent = multiprocessing.Event()
         self.imageQueue = multiprocessing.Queue(1)
+        self.fps = multiprocessing.Value('d', 0.0)
     
     def start(self):
         print('Starting capture...')
@@ -56,27 +57,23 @@ class ProcessInputSource:
         capture = self.getVideoCapture()
         self.startedEvent.set()
         startTime = time.time()
-        lastTime = time.time()
+        fpsLastTime = time.time()
         while (not self.stopEvent.is_set()) and capture.isOpened():
             succces, frame = capture.read()
             if not succces:
                 raise Exception("Failed to capture frame")
             
             if self.frameRequestEvent.is_set():
-                print('Frame request received')
                 while not self.imageQueue.empty():
                     self.imageQueue.get()
-                    print('Frame queue cleared')
                 
                 self.imageQueue.put(frame)
-                print('Frame added to queue')
                 self.frameRequestEvent.clear()
                 self.frameReadyEvent.set()
-                print('Frame ready event set')
 
-            fps = (1/ (time.time() - lastTime))
-            lastTime = time.time()
-            print(f"FPS: {fps:.2f}")
+            fps = (1/ (time.time() - fpsLastTime))
+            fpsLastTime = time.time()
+            self.fps.value = fps
             
             endTime = time.time()
             elapsedTime = endTime - startTime
@@ -86,7 +83,6 @@ class ProcessInputSource:
         
         capture.release()
         self.stoppedEvent.set()
-        print('Exited capture loop')
 
 
     def getImage(self):
@@ -96,18 +92,25 @@ class ProcessInputSource:
         self.frameReadyEvent.clear()
         return image
     
+    def getFps(self):
+        return self.fps.value
+    
 
 if __name__ == "__main__":
     cameraInputSource = ProcessInputSource(0, 1280, 720)
     cameraInputSource.start()
     fps = 0
-    lastTime = time.time()
+    fpsLastTime = time.time()
     try:
         while True:
             image = cameraInputSource.getImage()
             if image is not None:
                 cv2.imshow("Camera", image)
-                time.sleep(1/30)
+                fps = (1/ (time.time() - fpsLastTime))
+                fpsLastTime = time.time()
+                print('Main thread FPS:', fps)
+                print('Process FPS:', cameraInputSource.getFps())
+
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
     except KeyboardInterrupt:
