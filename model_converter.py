@@ -2,10 +2,10 @@ from tflite_support.metadata_writers import object_detector
 from tflite_support.metadata_writers import writer_utils
 
 ObjectDetectorWriter = object_detector.MetadataWriter
-_MODEL_PATH = "traffic.tflite"
+_MODEL_PATH = "detect.tflite"
 # Task Library expects label files that are in the same format as the one below.
 _LABEL_FILE = "labelmap.txt"
-_SAVE_TO_PATH = "traffic_metadata.tflite"
+_SAVE_TO_PATH = "traffic_3rdMar2024.tflite"
 # Normalization parameters is required when reprocessing the image. It is
 # optional if the image pixel values are in range of [0, 255] and the input
 # tensor is quantized to uint8. See the introduction for normalization and
