@@ -14,8 +14,8 @@ FPS = 53
 
 # Define all the labels here
 red = Label(0, "red")
-yellow = Label(1, "yellow")
-green = Label(2, "green")
+green = Label(1, "green")
+yellow = Label(2, "yellow")
 off = Label(3, "off")
 
 # Add all the labels here

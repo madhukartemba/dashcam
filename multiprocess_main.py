@@ -18,8 +18,8 @@ HEIGHT = 720
 
 # Labels
 RED = Label(0, "red")
-YELLOW = Label(1, "yellow")
-GREEN = Label(2, "green")
+GREEN = Label(1, "green")
+YELLOW = Label(2, "yellow")
 OFF = Label(3, "off")
 
 # Inference
