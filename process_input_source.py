@@ -1,13 +1,18 @@
 import multiprocessing
 import cv2
 import time
+from dashcam import Dashcam
 
 class ProcessInputSource:
-    def __init__(self, videoSource, width, height, maxFps=30.0) -> None:
+    def __init__(self, videoSource, width, height, outputFolder, recoveryFolder, fileDuration=600, maxFps=30.0) -> None:
         self.videoSource = videoSource
         self.width = width
         self.height = height
         self.maxFps = maxFps
+        self.fileDuration = fileDuration
+        self.outputFolder = outputFolder
+        self.recoveryFolder = recoveryFolder
+        self.frame = None
 
         self.process = None
         self.stopEvent = multiprocessing.Event()
@@ -58,6 +63,10 @@ class ProcessInputSource:
         self.startedEvent.set()
         startTime = time.time()
         fpsLastTime = time.time()
+
+        dashcam = Dashcam(self, self.fileDuration, self.outputFolder, self.recoveryFolder, self.maxFps)
+        dashcam.start()
+
         while (not self.stopEvent.is_set()) and capture.isOpened():
             succces, frame = capture.read()
             if not succces:
@@ -81,11 +90,16 @@ class ProcessInputSource:
             startTime = time.time()
             time.sleep(waitTime)
         
+        dashcam.stop()
         capture.release()
         self.stoppedEvent.set()
 
-
+    # Directly get the image, will only work in the same process
     def getImage(self):
+        return self.frame
+    
+    # Request the image from the process
+    def requestImage(self):
         self.frameRequestEvent.set()
         self.frameReadyEvent.wait()
         image = self.imageQueue.get()

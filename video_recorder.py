@@ -4,13 +4,14 @@ import os
 import cv2
 import shutil
 from input_source import InputSource
+from process_input_source import ProcessInputSource
 from video_maker import VideoMaker
 
 
 class VideoRecorder:
     def __init__(
         self,
-        inputSource: InputSource,
+        inputSource: InputSource | ProcessInputSource,
         outputFile: str,
         fps: float = 30.0,
         recoveryFolder: str = "recovery",
