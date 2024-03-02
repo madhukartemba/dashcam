@@ -41,28 +41,27 @@ ACTIONS_DICT = {
 
 
 if __name__ == "__main__":
-
-    # Start recovery as soon as the program starts
-    videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
-    videoRecovery.recoverVideo()
-
-    # Open input source process with built-in dashcam recording
-    inputSource = InputSourceProcess(CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS)
-    inputSource.start()
-
-    # Start inference
-    inference = Inference(
-        inputSource,
-        [GREEN.index, YELLOW.index, RED.index, OFF.index],
-        MODEL,
-        SCORE_THRESHOLD,
-        MAX_RESULTS,
-        NUM_THREADS,
-        ACTIONS_DICT,
-        showPreview=True,
-    )
-
     try:
+        # Start recovery as soon as the program starts
+        videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
+        videoRecovery.recoverVideo()
+
+        # Open input source process with built-in dashcam recording
+        inputSource = InputSourceProcess(CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS)
+        inputSource.start()
+
+        # Start inference
+        inference = Inference(
+            inputSource,
+            [GREEN.index, YELLOW.index, RED.index, OFF.index],
+            MODEL,
+            SCORE_THRESHOLD,
+            MAX_RESULTS,
+            NUM_THREADS,
+            ACTIONS_DICT,
+            showPreview=True,
+        )
+
         while True:
             inference.infer()
 
