@@ -3,7 +3,7 @@ import cv2
 import time
 from dashcam import Dashcam
 
-class ProcessInputSource:
+class InputSourceProcess:
     def __init__(self, videoSource, width, height, outputFolder, recoveryFolder, fileDuration=600, maxFps=30.0) -> None:
         self.videoSource = videoSource
         self.width = width
@@ -79,7 +79,8 @@ class ProcessInputSource:
                 self.imageQueue.put(frame)
                 self.frameRequestEvent.clear()
                 self.frameReadyEvent.set()
-
+            
+            self.frame = frame
             fps = (1/ (time.time() - fpsLastTime))
             fpsLastTime = time.time()
             self.fps.value = fps
@@ -111,13 +112,13 @@ class ProcessInputSource:
     
 
 if __name__ == "__main__":
-    cameraInputSource = ProcessInputSource(0, 1280, 720)
+    cameraInputSource = InputSourceProcess(0, 1280, 720)
     cameraInputSource.start()
     fps = 0
     fpsLastTime = time.time()
     try:
         while True:
-            image = cameraInputSource.getImage()
+            image = cameraInputSource.requestImage()
             if image is not None:
                 cv2.imshow("Camera", image)
                 fps = (1/ (time.time() - fpsLastTime))
