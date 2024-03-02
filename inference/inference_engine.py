@@ -8,12 +8,21 @@ import numpy as np
 
 
 class InferenceEngine:
-    def __init__(self, model, threads=2, scoreThreshold=0.5, maxResults=3) -> None:
+    def __init__(
+        self,
+        model,
+        categoriesDeniedList=None,
+        threads=2,
+        scoreThreshold=0.5,
+        maxResults=3,
+    ) -> None:
         base_options = core.BaseOptions(
             file_name=model, use_coral=False, num_threads=threads
         )
         detection_options = processor.DetectionOptions(
-            max_results=maxResults, score_threshold=scoreThreshold
+            max_results=maxResults,
+            score_threshold=scoreThreshold,
+            category_name_deniedlist=categoriesDeniedList,
         )
         options = vision.ObjectDetectorOptions(
             base_options=base_options, detection_options=detection_options

@@ -64,6 +64,7 @@ if __name__ == "__main__":
         MAX_RESULTS,
         NUM_THREADS,
         ACTIONS_DICT,
+        categoriesDeniedList=[OFF.name],
         showPreview=True,
     )
 

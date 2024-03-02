@@ -47,7 +47,9 @@ if __name__ == "__main__":
         videoRecovery.recoverVideo()
 
         # Open input source process with built-in dashcam recording
-        inputSource = InputSourceProcess(CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS)
+        inputSource = InputSourceProcess(
+            CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS
+        )
         inputSource.start()
 
         # Start inference
@@ -59,6 +61,7 @@ if __name__ == "__main__":
             MAX_RESULTS,
             NUM_THREADS,
             ACTIONS_DICT,
+            categoriesDeniedList=[OFF.name],
             showPreview=True,
         )
 

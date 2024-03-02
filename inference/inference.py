@@ -20,6 +20,7 @@ class Inference:
         maxResults,
         numThreads,
         actionsDict,
+        categoriesDeniedList=None,
         showPreview=True,
     ) -> None:
 
@@ -30,7 +31,7 @@ class Inference:
         self.showPreview = showPreview
 
         self.inferenceEngine = InferenceEngine(
-            model, numThreads, scoreThreshold, maxResults
+            model, categoriesDeniedList, numThreads, scoreThreshold, maxResults
         )
 
         self.detectionFilter = DetectionFilter(
