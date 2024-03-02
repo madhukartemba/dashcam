@@ -1,13 +1,13 @@
 import time
 import cv2
-import utils
+import utils.utils as utils
 import threading
 from input_output.input_source import InputSource
 from input_output.input_source_process import InputSourceProcess
 from inference.inference_engine import InferenceEngine
 from inference.detection_filter import DetectionFilter
 from inference.final_decision import FinalDecision
-from actions import Actions
+from inference.actions import Actions
 
 
 class Inference:

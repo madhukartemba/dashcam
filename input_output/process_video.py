@@ -18,7 +18,7 @@ import cv2
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import utils
+import utils.utils as utils
 import input_output.input_source as input_source
 
 

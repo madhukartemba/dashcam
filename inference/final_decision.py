@@ -1,5 +1,5 @@
 from tflite_support.task import processor
-import utils
+import utils.utils as utils
 
 
 class FinalDecision:

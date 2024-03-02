@@ -1,8 +1,8 @@
-import utils
-from labels import Label
+import utils.utils as utils
+from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
 from input_output.input_source import InputSource
-from dashcam import Dashcam
+from input_output.dashcam import Dashcam
 from inference.inference import Inference
 
 

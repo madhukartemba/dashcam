@@ -1,7 +1,7 @@
 import multiprocessing
 import cv2
 import time
-from dashcam import Dashcam
+from input_output.dashcam import Dashcam
 
 class InputSourceProcess:
     def __init__(self, videoSource, width, height, outputFolder, recoveryFolder, fileDuration=600, maxFps=30.0) -> None:

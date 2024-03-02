@@ -1,13 +1,13 @@
 import argparse
 import cv2
-import utils
+import utils.utils as utils
 from input_output.input_source import InputSource
 from input_output.video_maker import VideoMaker
 from inference.inference_engine import InferenceEngine
 from inference.detection_filter import DetectionFilter
 from inference.final_decision import FinalDecision
-from actions import Actions
-from labels import Labels, Label
+from inference.actions import Actions
+from inference.labels import Labels, Label
 
 # Define the expected FPS
 FPS = 53

@@ -1,7 +1,7 @@
 import cv2
 import time
 import threading
-import utils
+import utils.utils as utils
 
 
 class InputSource:

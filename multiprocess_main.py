@@ -1,5 +1,5 @@
-import utils
-from labels import Label
+import utils.utils as utils
+from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
 from input_output.input_source_process import InputSourceProcess
 from inference.inference import Inference
