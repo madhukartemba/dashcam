@@ -58,7 +58,7 @@ class InputSource:
         self.refreshFrame()
         self.startedEvent.set()
         frameInterval = 1/self.maxFps
-        while not self.stopEvent.is_set():
+        while (not self.stopEvent.is_set()) and self.isCaptureOpen():
             startTime = time.time()
             self.refreshFrame()
             endTime = time.time()
