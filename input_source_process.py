@@ -99,7 +99,7 @@ class InputSourceProcess:
     def getImage(self):
         return self.frame
     
-    # Request the image from the process
+    # Request the image from a seperate process
     def requestImage(self):
         self.frameRequestEvent.set()
         self.frameReadyEvent.wait()
