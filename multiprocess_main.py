@@ -23,7 +23,7 @@ GREEN = Label(2, "green")
 OFF = Label(3, "off")
 
 # Inference
-MODEL = "traffic_light.tflite"
+MODEL = "models/3rdMar2024/traffic_3rdMar2024.tflite"
 SCORE_THRESHOLD = 0.4
 MAX_RESULTS = 3
 NUM_THREADS = 2
