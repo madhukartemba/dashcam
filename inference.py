@@ -53,7 +53,11 @@ class Inference:
         pass
 
     def infer(self):
-        image = self.inputSource.getImage()
+        if isinstance(self.inputSource, InputSourceProcess):
+            image = self.inputSource.requestImage()
+        else:
+            image = self.inputSource.getImage()
+    
         currentTime = time.time()
         fps = 1 / (currentTime - self.fpsLastTime)
         self.fpsLastTime = currentTime

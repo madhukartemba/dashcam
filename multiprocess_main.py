@@ -2,7 +2,6 @@ import utils
 from labels import Label
 from video_recovery import VideoRecovery
 from input_source_process import InputSourceProcess
-from dashcam import Dashcam
 from inference import Inference
 
 
@@ -47,13 +46,9 @@ if __name__ == "__main__":
     videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
     videoRecovery.recoverVideo()
 
-    # Open input source
-    inputSource = InputSourceProcess(CAMERA_ID, WIDTH, HEIGHT, FPS)
+    # Open input source process with built-in dashcam recording
+    inputSource = InputSourceProcess(CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS)
     inputSource.start()
-
-    # Start up dashcam recording
-    dashcam = Dashcam(inputSource, FILE_DURATION, OUTPUT_FOLDER, RECOVERY_FOLDER, FPS)
-    # dashcam.start()
 
     # Start inference
     inference = Inference(
@@ -76,7 +71,6 @@ if __name__ == "__main__":
     finally:
         inference.destroyWindow()
         inference.stop()
-        dashcam.stop()
         inputSource.stop()
 
     pass
