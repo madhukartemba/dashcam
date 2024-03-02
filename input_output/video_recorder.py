@@ -4,7 +4,7 @@ import os
 import cv2
 import shutil
 from input_source import InputSource
-from video_maker import VideoMaker
+from input_output.video_maker import VideoMaker
 
 
 class VideoRecorder:

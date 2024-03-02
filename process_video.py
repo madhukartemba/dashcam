@@ -19,7 +19,7 @@ from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
 import utils
-import input_source
+import input_output.input_source as input_source
 
 
 def run(

@@ -2,11 +2,11 @@ import time
 import cv2
 import utils
 import threading
-from input_source import InputSource
-from input_source_process import InputSourceProcess
-from inference_engine import InferenceEngine
-from detection_filter import DetectionFilter
-from final_decision import FinalDecision
+from input_output.input_source import InputSource
+from input_output.input_source_process import InputSourceProcess
+from inference.inference_engine import InferenceEngine
+from inference.detection_filter import DetectionFilter
+from inference.final_decision import FinalDecision
 from actions import Actions
 
 

@@ -1,9 +1,9 @@
 import utils
 from labels import Label
-from video_recovery import VideoRecovery
-from input_source import InputSource
+from input_output.video_recovery import VideoRecovery
+from input_output.input_source import InputSource
 from dashcam import Dashcam
-from inference import Inference
+from inference.inference import Inference
 
 
 # File config
