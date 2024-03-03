@@ -14,7 +14,7 @@ FILE_DURATION = 600
 
 # Input Source
 FPS = 30.0
-CAMERA_ID = "videos/combinedOutput1.mp4"
+CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
 SHOW_PREVIEW = True
