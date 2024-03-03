@@ -74,7 +74,7 @@ if __name__ == "__main__":
     )
 
     try:
-        while not inputSource.stopEvent.is_set():
+        while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set):
             inference.infer()
 
             if SHOW_PREVIEW and cv2.waitKey(1) == ord("q"):

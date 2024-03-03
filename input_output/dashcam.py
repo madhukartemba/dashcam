@@ -1,6 +1,7 @@
 import time
 import os
 import threading
+import utils.utils as utils
 from input_output.input_source import InputSource
 from input_output.video_recorder import VideoRecorder
 
@@ -28,22 +29,28 @@ class Dashcam:
         pass
 
     def record(self):
-        while not self.stopEvent.is_set():
-            fileName = f"{int(time.time())}.mp4"
-            outputFile = os.path.join(self.outputFolder, fileName)
-            videoRecorder = VideoRecorder(
-                self.inputSource, outputFile, self.fps, self.recoveryFolder
-            )
-            videoRecorder.start()
+        try:
+            while not self.stopEvent.is_set():
+                fileName = f"{int(time.time())}.mp4"
+                outputFile = os.path.join(self.outputFolder, fileName)
+                videoRecorder = VideoRecorder(
+                    self.inputSource, outputFile, self.fps, self.recoveryFolder
+                )
+                videoRecorder.start()
 
-            startTime = time.time()
+                startTime = time.time()
 
-            while (
-                time.time() - startTime
-            ) < self.fileDuration and not self.stopEvent.is_set():
-                time.sleep(1)
+                while (
+                    time.time() - startTime
+                ) < self.fileDuration and not self.stopEvent.is_set():
+                    time.sleep(1)
 
-            videoRecorder.stop()
+                videoRecorder.stop()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
+        finally:
+            self.stopEvent.set()
 
     def start(self):
         self.thread = threading.Thread(target=self.record)
