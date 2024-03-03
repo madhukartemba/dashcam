@@ -43,6 +43,8 @@ ACTIONS_DICT = {
 
 if __name__ == "__main__":
 
+    utils.playSound("sounds/startup.mp3")
+
     # Start recovery as soon as the program starts
     videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
     videoRecovery.recoverVideo()
@@ -73,6 +75,7 @@ if __name__ == "__main__":
             inference.infer()
 
     except Exception as e:
+        utils.playSound("sounds/error.mp3")
         print(e)
     finally:
         inference.destroyWindow()
