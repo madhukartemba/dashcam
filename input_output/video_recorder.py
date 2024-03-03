@@ -3,6 +3,7 @@ import time
 import os
 import cv2
 import shutil
+import utils.utils as utils
 from input_output.input_source import InputSource
 from input_output.video_maker import VideoMaker
 
@@ -29,41 +30,53 @@ class VideoRecorder:
         pass
 
     def recordVideo(self):
-        frameInterval = 1 / self.fps
-        while not self.stopEvent.is_set():
-            startTime = time.time()
+        try:
+            frameInterval = 1 / self.fps
+            while not self.stopEvent.is_set():
+                startTime = time.time()
 
-            image = self.inputSource.getImage()
+                image = self.inputSource.getImage()
 
-            if image is None:
-                continue
+                if image is None:
+                    continue
 
-            self.videoMaker.writeFrame(image)
+                self.videoMaker.writeFrame(image)
 
-            endTime = time.time()
-            elapsedTime = endTime - startTime
-            waitTime = max(0, frameInterval - elapsedTime)
-            time.sleep(waitTime)
+                endTime = time.time()
+                elapsedTime = endTime - startTime
+                waitTime = max(0, frameInterval - elapsedTime)
+                time.sleep(waitTime)
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
+        finally:
+            self.stopEvent.set()
 
     def recovery(self):
-        if not os.path.exists(self.recoveryFolder):
-            os.makedirs(self.recoveryFolder)
-        frameInterval = 1 / self.fps
-        frameCount = 0
-        while not self.stopEvent.is_set():
-            startTime = time.time()
+        try:
+            if not os.path.exists(self.recoveryFolder):
+                os.makedirs(self.recoveryFolder)
+            frameInterval = 1 / self.fps
+            frameCount = 0
+            while not self.stopEvent.is_set():
+                startTime = time.time()
 
-            image = self.inputSource.getImage()
+                image = self.inputSource.getImage()
 
-            if image is None:
-                continue
+                if image is None:
+                    continue
 
-            frameCount += 1
-            cv2.imwrite(f"{self.recoveryFolder}/{frameCount}.jpg", image)
-            endTime = time.time()
-            elapsedTime = endTime - startTime
-            waitTime = max(0, frameInterval - elapsedTime)
-            time.sleep(waitTime)
+                frameCount += 1
+                cv2.imwrite(f"{self.recoveryFolder}/{frameCount}.jpg", image)
+                endTime = time.time()
+                elapsedTime = endTime - startTime
+                waitTime = max(0, frameInterval - elapsedTime)
+                time.sleep(waitTime)
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
+        finally:
+            self.stopEvent.set()
 
     def start(self):
         self.mainThread = threading.Thread(target=self.recordVideo)

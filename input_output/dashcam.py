@@ -41,8 +41,10 @@ class Dashcam:
                 startTime = time.time()
 
                 while (
-                    time.time() - startTime
-                ) < self.fileDuration and not self.stopEvent.is_set():
+                    (time.time() - startTime) < self.fileDuration
+                    and (not self.stopEvent.is_set())
+                    and (not videoRecorder.stopEvent.is_set())
+                ):
                     time.sleep(1)
 
                 videoRecorder.stop()
