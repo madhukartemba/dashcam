@@ -22,7 +22,7 @@ class InferenceEngine:
         detection_options = processor.DetectionOptions(
             max_results=maxResults,
             score_threshold=scoreThreshold,
-            category_name_deniedlist=categoriesDeniedList,
+            category_name_denylist=categoriesDeniedList,
         )
         options = vision.ObjectDetectorOptions(
             base_options=base_options, detection_options=detection_options
