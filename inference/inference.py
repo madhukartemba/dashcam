@@ -65,8 +65,8 @@ class Inference:
         else:
             image = self.inputSource.getImage()
 
-        self.finalDecision.updateMinCount(int(self.fps * 2 / 3))
-        self.actions.updateBufferSize(10 * self.fps)
+        self.finalDecision.updateMinCount(int(self.fps))
+        self.actions.updateBufferSize(int(10 * self.fps))
 
         detectionResult = self.inferenceEngine.getDetections(image)
 
