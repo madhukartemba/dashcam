@@ -13,7 +13,7 @@ FILE_DURATION = 600
 
 # Input Source
 FPS = 30.0
-CAMERA_ID = 0
+CAMERA_ID = "videos/combinedOutput1.mp4"
 WIDTH = 1280
 HEIGHT = 720
 
@@ -66,6 +66,7 @@ if __name__ == "__main__":
         MAX_RESULTS,
         NUM_THREADS,
         ACTIONS_DICT,
+        maxFps=FPS,
         categoriesDeniedList=[OFF.name],
         showPreview=True,
     )

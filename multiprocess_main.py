@@ -61,6 +61,7 @@ if __name__ == "__main__":
             MAX_RESULTS,
             NUM_THREADS,
             ACTIONS_DICT,
+            maxFps=FPS,
             categoriesDeniedList=[OFF.name],
             showPreview=True,
         )

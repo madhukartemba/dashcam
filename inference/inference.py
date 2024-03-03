@@ -20,6 +20,7 @@ class Inference:
         maxResults,
         numThreads,
         actionsDict,
+        maxFps,
         categoriesDeniedList=None,
         showPreview=True,
     ) -> None:
@@ -44,6 +45,10 @@ class Inference:
 
         self.fpsLastTime = time.time()
 
+        self.frameInterval = 1 / maxFps
+
+        self.fps = 0
+
         pass
 
     def run(self):
@@ -54,17 +59,14 @@ class Inference:
         pass
 
     def infer(self):
+        startTime = time.time()
         if isinstance(self.inputSource, InputSourceProcess):
             image = self.inputSource.requestImage()
         else:
             image = self.inputSource.getImage()
-    
-        currentTime = time.time()
-        fps = 1 / (currentTime - self.fpsLastTime)
-        self.fpsLastTime = currentTime
 
-        self.finalDecision.updateMinCount(int(fps * 2 / 3))
-        self.actions.updateBufferSize(10 * fps)
+        self.finalDecision.updateMinCount(int(self.fps * 2 / 3))
+        self.actions.updateBufferSize(10 * self.fps)
 
         detectionResult = self.inferenceEngine.getDetections(image)
 
@@ -79,7 +81,7 @@ class Inference:
         )
 
         if self.showPreview:
-            fps_text = "FPS = {:.1f}".format(fps)
+            fps_text = "FPS = {:.1f}".format(self.fps)
             utils.putText(image, fps_text, (24, 20))
 
             if detection != None:
@@ -87,6 +89,12 @@ class Inference:
 
             cv2.imshow("Inference", image)
             cv2.waitKey(1)
+
+        currentTime = time.time()
+        elapsedTime = currentTime - startTime
+        time.sleep(max(0, self.frameInterval - elapsedTime))
+        self.fps = 1 / (time.time() - startTime)
+        pass
 
     def destroyWindow(self):
         if self.showPreview:
