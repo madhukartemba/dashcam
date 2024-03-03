@@ -55,16 +55,23 @@ class InputSource:
         self.releaseCapture()
 
     def captureFrames(self):
-        self.refreshFrame()
-        self.startedEvent.set()
-        frameInterval = 1/self.maxFps
-        while (not self.stopEvent.is_set()) and self.isCaptureOpen():
-            startTime = time.time()
+        try:
             self.refreshFrame()
-            endTime = time.time()
-            elapsedTime = endTime - startTime
-            waitTime = max(0, frameInterval - elapsedTime)
-            time.sleep(waitTime)
+            self.startedEvent.set()
+            frameInterval = 1 / self.maxFps
+            while (not self.stopEvent.is_set()) and self.isCaptureOpen():
+                startTime = time.time()
+                self.refreshFrame()
+                endTime = time.time()
+                elapsedTime = endTime - startTime
+                waitTime = max(0, frameInterval - elapsedTime)
+                time.sleep(waitTime)
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
+        finally:
+            self.stopEvent.set()
+            self.releaseCapture()
 
     def refreshFrame(self):
 
