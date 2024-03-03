@@ -25,19 +25,19 @@ OFF = Label(3, "off")
 
 # Inference
 MODEL = "models/3rdMar2024/traffic_3rdMar2024.tflite"
-SCORE_THRESHOLD = 0.4
+SCORE_THRESHOLD = 0.55
 MAX_RESULTS = 3
 NUM_THREADS = 2
 
 # Actions
 ACTIONS_DICT = {
-    (RED.index, GREEN.index): lambda: utils.playSound("sounds/key24.mp3"),
-    (YELLOW.index, GREEN.index): lambda: utils.playSound("sounds/key24.mp3"),
-    (GREEN.index, YELLOW.index): lambda: utils.playSound("sounds/key21.mp3"),
-    (None, YELLOW.index): lambda: utils.playSound("sounds/key21.mp3"),
-    (GREEN.index, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
-    (YELLOW.index, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
-    (None, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
+    (RED.index, GREEN.index): lambda: utils.playSound("sounds/green.mp3"),
+    (YELLOW.index, GREEN.index): lambda: utils.playSound("sounds/green.mp3"),
+    (GREEN.index, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
+    (None, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
+    (GREEN.index, RED.index): lambda: utils.playSound("sounds/red.mp3"),
+    (YELLOW.index, RED.index): lambda: utils.playSound("sounds/red.mp3"),
+    (None, RED.index): lambda: utils.playSound("sounds/red.mp3"),
 }
 
 
