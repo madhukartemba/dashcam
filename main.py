@@ -1,3 +1,4 @@
+import cv2
 import utils.utils as utils
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
@@ -16,6 +17,7 @@ FPS = 30.0
 CAMERA_ID = "videos/combinedOutput1.mp4"
 WIDTH = 1280
 HEIGHT = 720
+SHOW_PREVIEW = True
 
 # Labels
 RED = Label(0, "red")
@@ -68,13 +70,18 @@ if __name__ == "__main__":
         ACTIONS_DICT,
         maxFps=FPS,
         categoriesDeniedList=[OFF.name],
-        showPreview=True,
+        showPreview=SHOW_PREVIEW,
     )
 
     try:
         while True:
             inference.infer()
 
+            if SHOW_PREVIEW and cv2.waitKey(1) == ord("q"):
+                break
+
+    except KeyboardInterrupt:
+        print("Closing the application...")
     except Exception as e:
         utils.playSound("sounds/error.mp3")
         print(e)
