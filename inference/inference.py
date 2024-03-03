@@ -97,8 +97,12 @@ class Inference:
         pass
 
     def destroyWindow(self):
-        if self.showPreview:
-            cv2.destroyWindow("Inference")
+        try:
+            if self.showPreview:
+                cv2.destroyWindow("Inference")
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
 
     def start(self):
         self.thread = threading.Thread(target=self.run)

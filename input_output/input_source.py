@@ -46,7 +46,7 @@ class InputSource:
     def start(self):
         self.thread = threading.Thread(target=self.captureFrames)
         self.thread.start()
-        self.startedEvent.wait()
+        self.startedEvent.wait(timeout=10)
 
     def stop(self):
         self.stopEvent.set()
