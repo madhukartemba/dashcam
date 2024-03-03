@@ -1,7 +1,7 @@
 import time
 import os
 import threading
-from input_source.input_source import InputSource
+from input_output.input_source import InputSource
 from input_output.video_recorder import VideoRecorder
 
 

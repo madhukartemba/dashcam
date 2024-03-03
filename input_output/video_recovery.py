@@ -2,7 +2,7 @@ import cv2
 import os
 import shutil
 import re
-from video_maker import VideoMaker
+from input_output.video_maker import VideoMaker
 
 
 class VideoRecovery:
