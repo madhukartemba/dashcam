@@ -13,7 +13,7 @@ from inference.actions import Actions
 class Inference:
     def __init__(
         self,
-        inputSource: InputSource | InputSourceProcess,
+        inputSource,
         indexPriority,
         model,
         scoreThreshold,
