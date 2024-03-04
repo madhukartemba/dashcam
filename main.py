@@ -10,7 +10,7 @@ from inference.inference import Inference
 # File config
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
-FILE_DURATION = 600
+FILE_DURATION = 120
 
 # Input Source
 FPS = 30.0
