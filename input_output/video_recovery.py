@@ -2,6 +2,7 @@ import cv2
 import os
 import shutil
 import re
+import utils.utils as utils
 from input_output.video_maker import VideoMaker
 
 
@@ -14,11 +15,15 @@ class VideoRecovery:
         self.fps = fps
 
     def getFrameDimensions(self):
-        image_file = os.path.join(
-            self.recoveryFolder, os.listdir(self.recoveryFolder)[0]
-        )
-        image = cv2.imread(image_file)
-        return image.shape[1], image.shape[0]
+        try:
+            image_file = os.path.join(
+                self.recoveryFolder, os.listdir(self.recoveryFolder)[0]
+            )
+            image = cv2.imread(image_file)
+            return image.shape[1], image.shape[0]
+        except Exception as e:
+            print(e)
+            return (1280, 720)
 
     @staticmethod
     def frameNumberSort(fileName):
@@ -30,53 +35,60 @@ class VideoRecovery:
 
     def recoverVideo(self):
 
-        if not os.path.exists(self.recoveryFolder):
-            print(f"Recovery folder '{self.recoveryFolder}' does not exist.")
-            return
+        try:
+            if not os.path.exists(self.recoveryFolder):
+                print(f"Recovery folder '{self.recoveryFolder}' does not exist.")
+                return
 
-        if not os.path.isdir(self.recoveryFolder):
-            print(f"Path '{self.recoveryFolder}' is not a directory.")
-            return
+            if not os.path.isdir(self.recoveryFolder):
+                print(f"Path '{self.recoveryFolder}' is not a directory.")
+                return
 
-        if not os.listdir(self.recoveryFolder):
-            print(
-                f"Recovery folder '{self.recoveryFolder}' is empty. No images to recover."
+            if not os.listdir(self.recoveryFolder):
+                print(
+                    f"Recovery folder '{self.recoveryFolder}' is empty. No images to recover."
+                )
+                return
+
+            sortedFiles = sorted(
+                filter(
+                    lambda x: str(x).endswith(".jpg"), os.listdir(self.recoveryFolder)
+                ),
+                key=VideoRecovery.frameNumberSort,
             )
-            return
 
-        sortedFiles = sorted(
-            filter(lambda x: str(x).endswith(".jpg"), os.listdir(self.recoveryFolder)),
-            key=VideoRecovery.frameNumberSort,
-        )
+            width, height = self.getFrameDimensions()
+            firstTimestamp = str(
+                int(os.path.getmtime(os.path.join(self.recoveryFolder, sortedFiles[0])))
+            )
 
-        width, height = self.getFrameDimensions()
-        firstTimestamp = str(
-            int(os.path.getmtime(os.path.join(self.recoveryFolder, sortedFiles[0])))
-        )
+            print("\nStarting recovery...")
 
-        print("\nStarting recovery...")
+            outputFile = os.path.join(self.outputFolder, firstTimestamp)
 
-        outputFile = os.path.join(self.outputFolder, firstTimestamp)
+            videoMaker = VideoMaker(outputFile, width, height, self.fps)
 
-        videoMaker = VideoMaker(outputFile, width, height, self.fps)
+            total_files = len(sortedFiles)
 
-        total_files = len(sortedFiles)
+            for i, file in enumerate(sortedFiles, start=1):
+                image_path = os.path.join(self.recoveryFolder, file)
+                try:
+                    image = cv2.imread(image_path)
+                    videoMaker.writeFrame(image)
+                except Exception as e:
+                    print(f"Exception occured while processing image {image_path}")
+                    print(e)
 
-        for i, file in enumerate(sortedFiles, start=1):
-            image_path = os.path.join(self.recoveryFolder, file)
-            try:
-                image = cv2.imread(image_path)
-                videoMaker.writeFrame(image)
-            except Exception as e:
-                print(f"Exception occured while processing image {image_path}")
-                print(e)
+                progress = i / total_files * 100
+                print(f"\rProgress: {progress:.2f}%", end="", flush=True)
 
-            progress = i / total_files * 100
-            print(f"\rProgress: {progress:.2f}%", end="", flush=True)
+            videoMaker.releaseVideo()
+            shutil.rmtree(self.recoveryFolder, ignore_errors=True)
+            print("\nRecovery completed.\n")
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
 
-        videoMaker.releaseVideo()
-        shutil.rmtree(self.recoveryFolder, ignore_errors=True)
-        print("\nRecovery completed.\n")
         pass
 
 
