@@ -34,6 +34,7 @@ NUM_THREADS = 2
 ACTIONS_DICT = {
     (RED.index, GREEN.index): lambda: utils.playSound("sounds/green.mp3"),
     (YELLOW.index, GREEN.index): lambda: utils.playSound("sounds/green.mp3"),
+    (RED.index, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
     (GREEN.index, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
     (None, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
     (GREEN.index, RED.index): lambda: utils.playSound("sounds/red.mp3"),
