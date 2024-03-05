@@ -1,3 +1,4 @@
+import cv2
 import utils.utils as utils
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
@@ -8,13 +9,14 @@ from inference.inference import Inference
 # File config
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
-FILE_DURATION = 600
+FILE_DURATION = 120
 
 # Input Source
 FPS = 30.0
 CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
+SHOW_PREVIEW = True
 
 # Labels
 RED = Label(0, "red")
@@ -24,52 +26,59 @@ OFF = Label(3, "off")
 
 # Inference
 MODEL = "models/3rdMar2024/traffic_3rdMar2024.tflite"
-SCORE_THRESHOLD = 0.4
+SCORE_THRESHOLD = 0.7
 MAX_RESULTS = 3
 NUM_THREADS = 2
 
 # Actions
 ACTIONS_DICT = {
-    (RED.index, GREEN.index): lambda: utils.playSound("sounds/key24.mp3"),
-    (YELLOW.index, GREEN.index): lambda: utils.playSound("sounds/key24.mp3"),
-    (GREEN.index, YELLOW.index): lambda: utils.playSound("sounds/key21.mp3"),
-    (None, YELLOW.index): lambda: utils.playSound("sounds/key21.mp3"),
-    (GREEN.index, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
-    (YELLOW.index, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
-    (None, RED.index): lambda: utils.playSound("sounds/key18.mp3"),
+    (RED.index, GREEN.index): lambda: utils.playSound("sounds/green.mp3"),
+    (YELLOW.index, GREEN.index): lambda: utils.playSound("sounds/green.mp3"),
+    (GREEN.index, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
+    (None, YELLOW.index): lambda: utils.playSound("sounds/yellow.mp3"),
+    (GREEN.index, RED.index): lambda: utils.playSound("sounds/red.mp3"),
+    (YELLOW.index, RED.index): lambda: utils.playSound("sounds/red.mp3"),
+    (None, RED.index): lambda: utils.playSound("sounds/red.mp3"),
 }
 
 
 if __name__ == "__main__":
+
+    # Start recovery as soon as the program starts
+    videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
+    videoRecovery.recoverVideo()
+
+    # Open input source process with built-in dashcam recording
+    inputSource = InputSourceProcess(
+        CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS
+    )
+    inputSource.start()
+
+    # Start inference
+    inference = Inference(
+        inputSource,
+        [GREEN.index, YELLOW.index, RED.index, OFF.index],
+        MODEL,
+        SCORE_THRESHOLD,
+        MAX_RESULTS,
+        NUM_THREADS,
+        ACTIONS_DICT,
+        maxFps=FPS,
+        categoriesDeniedList=[OFF.name],
+        showPreview=SHOW_PREVIEW,
+    )
+
     try:
-        # Start recovery as soon as the program starts
-        videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
-        videoRecovery.recoverVideo()
-
-        # Open input source process with built-in dashcam recording
-        inputSource = InputSourceProcess(
-            CAMERA_ID, WIDTH, HEIGHT, OUTPUT_FOLDER, RECOVERY_FOLDER, FILE_DURATION, FPS
-        )
-        inputSource.start()
-
-        # Start inference
-        inference = Inference(
-            inputSource,
-            [GREEN.index, YELLOW.index, RED.index, OFF.index],
-            MODEL,
-            SCORE_THRESHOLD,
-            MAX_RESULTS,
-            NUM_THREADS,
-            ACTIONS_DICT,
-            maxFps=FPS,
-            categoriesDeniedList=[OFF.name],
-            showPreview=True,
-        )
-
-        while True:
+        while not inputSource.stopEvent.is_set():
             inference.infer()
 
+            if SHOW_PREVIEW and cv2.waitKey(1) == ord("q"):
+                break
+
+    except KeyboardInterrupt:
+        print("Closing the application...")
     except Exception as e:
+        utils.playSound("sounds/error.mp3")
         print(e)
     finally:
         inference.destroyWindow()
