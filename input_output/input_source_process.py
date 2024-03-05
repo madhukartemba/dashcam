@@ -37,7 +37,8 @@ class InputSourceProcess:
         print('Waiting for capture to stop...')
         self.stoppedEvent.wait()
         print('Capture stopped event received, terminating process...')
-        self.process.terminate()
+        if self.process:
+            self.process.terminate()
         print('Process terminated')
 
     def getVideoCapture(self):
