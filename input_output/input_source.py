@@ -25,6 +25,7 @@ class InputSource:
         else:
             self.capture = cv2.VideoCapture(videoSource)
 
+        self.capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.image = None
         self.frameCount = 0
         self.openCaptureCheck()
