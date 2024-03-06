@@ -1,3 +1,4 @@
+import logging
 import threading
 import time
 import os
@@ -49,6 +50,7 @@ class VideoRecorder:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
         finally:
             self.stopEvent.set()
 
@@ -75,6 +77,7 @@ class VideoRecorder:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
         finally:
             self.stopEvent.set()
 

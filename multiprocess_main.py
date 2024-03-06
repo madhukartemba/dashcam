@@ -1,3 +1,5 @@
+import logging
+import os
 import cv2
 import utils.utils as utils
 from inference.labels import Label
@@ -10,6 +12,15 @@ from inference.inference import Inference
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
 FILE_DURATION = 120
+
+# Logging
+LOG_DIR = "logs"
+logging.basicConfig(
+    filename=os.path.join(LOG_DIR, "errors.log"),
+    level=logging.ERROR,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+
 
 # Input Source
 FPS = 30.0
@@ -81,6 +92,7 @@ if __name__ == "__main__":
     except Exception as e:
         utils.playSound("sounds/error.mp3")
         print(e)
+        logging.error(e)
     finally:
         inference.destroyWindow()
         inference.stop()

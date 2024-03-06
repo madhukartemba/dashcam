@@ -1,5 +1,7 @@
 import cv2
 import argparse
+import logging
+import os
 import utils.utils as utils
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
@@ -12,6 +14,11 @@ from inference.inference import Inference
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
 FILE_DURATION = 120
+
+# Logging
+LOG_DIR = "logs"
+logging.basicConfig(filename=os.path.join(LOG_DIR, 'errors.log'), level=logging.ERROR,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Input Source
 FPS = 30.0
@@ -99,6 +106,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
     except Exception as e:
         utils.playSound("sounds/error.mp3")
         print(e)
+        logging.error(e)
     finally:
         inference.destroyWindow()
         inference.stop()

@@ -1,3 +1,4 @@
+import logging
 import cv2
 import time
 import threading
@@ -69,6 +70,7 @@ class InputSource:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
         finally:
             self.stopEvent.set()
             self.releaseCapture()

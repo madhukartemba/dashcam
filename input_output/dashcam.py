@@ -1,3 +1,4 @@
+import logging
 import time
 import os
 import threading
@@ -51,6 +52,7 @@ class Dashcam:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
         finally:
             self.stopEvent.set()
 

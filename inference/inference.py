@@ -2,6 +2,7 @@ import time
 import cv2
 import utils.utils as utils
 import threading
+import logging
 from input_output.input_source import InputSource
 from input_output.input_source_process import InputSourceProcess
 from inference.inference_engine import InferenceEngine
@@ -103,6 +104,7 @@ class Inference:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
 
     def start(self):
         self.thread = threading.Thread(target=self.run)

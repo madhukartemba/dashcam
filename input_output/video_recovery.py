@@ -1,3 +1,4 @@
+import logging
 import cv2
 import os
 import shutil
@@ -23,6 +24,7 @@ class VideoRecovery:
             return image.shape[1], image.shape[0]
         except Exception as e:
             print(e)
+            logging.error(e)
             return (1280, 720)
 
     @staticmethod
@@ -78,6 +80,7 @@ class VideoRecovery:
                 except Exception as e:
                     print(f"Exception occured while processing image {image_path}")
                     print(e)
+                    logging.error(e)
 
                 progress = i / total_files * 100
                 print(f"\rProgress: {progress:.2f}%", end="", flush=True)
@@ -88,6 +91,7 @@ class VideoRecovery:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
 
         pass
 

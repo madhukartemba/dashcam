@@ -1,3 +1,4 @@
+import logging
 import multiprocessing
 import cv2
 import time
@@ -116,6 +117,7 @@ class InputSourceProcess:
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(e)
+            logging.error(e)
         finally:
             dashcam.stop()
             capture.release()

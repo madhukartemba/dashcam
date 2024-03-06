@@ -10,6 +10,9 @@ recovery/
 # Ignore the recordings folder
 recordings/
 
+# Ignore the logs folder
+logs/
+
 # Ignore pycache
 __pycache__
 
