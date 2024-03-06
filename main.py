@@ -47,7 +47,7 @@ ACTIONS_DICT = {
 
 def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
-    utils.playSound("sounds/startup.mp3")
+    utils.playSound("sounds/startup.mp3", wait=True)
 
     # Start recovery as soon as the program starts
     videoRecovery = VideoRecovery(

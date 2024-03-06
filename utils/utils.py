@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pygame
+import time
 from tflite_support.task import processor
 
 # Initialize pygame mixer
@@ -13,9 +14,13 @@ _FONT_THICKNESS = 1
 _TEXT_COLOR = (0, 255, 0)  # red
 
 
-def playSound(source: str):
+def playSound(source: str, wait=False):
     pygame.mixer.music.load(source)
     pygame.mixer.music.play()
+    if wait:
+        while pygame.mixer.music.get_busy():
+            time.sleep(0.5)
+            continue
 
 
 def putText(
