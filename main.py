@@ -1,4 +1,5 @@
 import cv2
+import argparse
 import utils.utils as utils
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
@@ -44,35 +45,47 @@ ACTIONS_DICT = {
 }
 
 
-if __name__ == "__main__":
+def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
     utils.playSound("sounds/startup.mp3")
 
     # Start recovery as soon as the program starts
-    videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
+    videoRecovery = VideoRecovery(
+        recoveryFolder=RECOVERY_FOLDER, outputFolder=OUTPUT_FOLDER, fps=maxFps
+    )
     videoRecovery.recoverVideo()
 
     # Open input source
-    inputSource = InputSource(CAMERA_ID, WIDTH, HEIGHT, FPS)
+    inputSource = InputSource(
+        videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=maxFps
+    )
     inputSource.start()
 
     # Start up dashcam recording
-    dashcam = Dashcam(inputSource, FILE_DURATION, OUTPUT_FOLDER, RECOVERY_FOLDER, FPS)
+    dashcam = Dashcam(
+        inputSource,
+        fileDuration=FILE_DURATION,
+        outputFolder=OUTPUT_FOLDER,
+        recoveryFolder=RECOVERY_FOLDER,
+        maxFps=maxFps,
+    )
     dashcam.start()
 
     # Start inference
     inference = Inference(
-        inputSource,
-        [GREEN.index, YELLOW.index, RED.index, OFF.index],
-        MODEL,
-        SCORE_THRESHOLD,
-        MAX_RESULTS,
-        NUM_THREADS,
-        ACTIONS_DICT,
-        maxFps=FPS,
+        inputSource=inputSource,
+        indexPriority=[GREEN.index, YELLOW.index, RED.index, OFF.index],
+        model=MODEL,
+        scoreThreshold=SCORE_THRESHOLD,
+        maxResults=MAX_RESULTS,
+        numThreads=numThreads,
+        actionsDict=ACTIONS_DICT,
+        maxFps=maxFps,
         categoriesDeniedList=[OFF.name],
-        showPreview=SHOW_PREVIEW,
+        showPreview=showPreview,
     )
+
+    utils.playSound("application_start.mp3")
 
     try:
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
@@ -92,4 +105,45 @@ if __name__ == "__main__":
         dashcam.stop()
         inputSource.stop()
 
+    pass
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument(
+        "--source",
+        help="Path to the input video file.",
+        required=False,
+        default=CAMERA_ID,
+    )
+    parser.add_argument(
+        "--numThreads",
+        help="Number of CPU threads to run the model.",
+        required=False,
+        type=int,
+        default=NUM_THREADS,
+    )
+    parser.add_argument(
+        "--maxFps",
+        help="Path to the output video file to save the processed frames.",
+        required=False,
+        type=float,
+        default=FPS,
+    )
+    parser.add_argument(
+        "--showPreview",
+        help="Show the preview of the video.",
+        required=False,
+        type=bool,
+        default=SHOW_PREVIEW,
+    )
+    args = parser.parse_args()
+    main(
+        cameraId=args.source,
+        maxFps=args.maxFps,
+        numThreads=args.numThreads,
+        showPreview=args.showPreview,
+    )
     pass
