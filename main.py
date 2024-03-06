@@ -67,7 +67,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         fileDuration=FILE_DURATION,
         outputFolder=OUTPUT_FOLDER,
         recoveryFolder=RECOVERY_FOLDER,
-        maxFps=maxFps,
+        fps=maxFps,
     )
     dashcam.start()
 
@@ -85,7 +85,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         showPreview=showPreview,
     )
 
-    utils.playSound("application_start.mp3")
+    utils.playSound("sounds/application_start.mp3")
 
     try:
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
