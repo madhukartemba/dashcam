@@ -1,6 +1,7 @@
 import logging
 import os
 import cv2
+from main import LOGS_FOLDER
 import utils.utils as utils
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
@@ -14,9 +15,11 @@ OUTPUT_FOLDER = "recordings"
 FILE_DURATION = 120
 
 # Logging
-LOG_DIR = "logs"
+LOGS_FOLDER = "logs"
+if not os.path.exists(LOGS_FOLDER):
+    os.makedirs(LOGS_FOLDER)
 logging.basicConfig(
-    filename=os.path.join(LOG_DIR, "errors.log"),
+    filename=os.path.join(LOGS_FOLDER, "errors.log"),
     level=logging.ERROR,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
