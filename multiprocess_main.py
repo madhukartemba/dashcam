@@ -24,7 +24,6 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
-
 # Input Source
 FPS = 30.0
 CAMERA_ID = 0
