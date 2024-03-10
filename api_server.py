@@ -1,12 +1,28 @@
 from enum import Enum
-import time
 from flask import Flask, jsonify
 import threading
 from dataclasses import dataclass
 
 
+class Status(Enum):
+    IDLE = "idle"
+    RECOVERY = "recovery"
+    INFERENCE = "inference"
+
+# API Data
+@dataclass
+class APIData:
+    status: str
+    trafficLightColor: str | None
+    recoveryPercent: int
+    fps: int
+
+
+apiData = APIData(status=Status.IDLE.value, trafficLightColor=None, recoveryPercent=0, fps=0)
+
+
 class APIServer:
-    def __init__(self, data):
+    def __init__(self, data=apiData):
         self.data = data
         self.app = Flask(__name__)
         self.thread = None

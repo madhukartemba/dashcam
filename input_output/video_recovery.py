@@ -3,7 +3,7 @@ import cv2
 import os
 import shutil
 import re
-from main import APIData, Status
+from api_server import APIData, Status
 import utils.utils as utils
 from input_output.video_maker import VideoMaker
 
