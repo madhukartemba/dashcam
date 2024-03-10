@@ -79,7 +79,7 @@ class Inference:
 
         detection = self.finalDecision.getDecision(detections)
         if self.apiData:
-            self.apiData.trafficLightColor = utils.getCategory(detection).display_name
+            self.apiData.trafficLightColor = utils.getCategory(detection).category_name
             self.apiData.fps = self.fps
 
         self.actions.act(
