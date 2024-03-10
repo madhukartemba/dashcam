@@ -75,7 +75,7 @@ class APIData:
     fps: int
 
 
-apiData = APIData(status="idle", trafficLightColor=None, recoveryPercent=0, fps=0)
+apiData = APIData(status=Status.IDLE.value, trafficLightColor=None, recoveryPercent=0, fps=0)
 
 
 def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
