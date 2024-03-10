@@ -59,7 +59,7 @@ ACTIONS_DICT = {
 if __name__ == "__main__":
 
     # Start recovery as soon as the program starts
-    videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, FPS)
+    videoRecovery = VideoRecovery(RECOVERY_FOLDER, OUTPUT_FOLDER, None, FPS)
     videoRecovery.recoverVideo()
 
     # Open input source process with built-in dashcam recording
@@ -80,6 +80,7 @@ if __name__ == "__main__":
         maxFps=FPS,
         categoriesDeniedList=[OFF.name],
         showPreview=SHOW_PREVIEW,
+        apiData=None
     )
 
     try:
