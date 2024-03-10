@@ -74,3 +74,6 @@ def visualize(
 
 def getCategory(detection: processor.Detection):
     return detection.categories[0]
+
+def getCategoryName(detection: processor.Detection):
+    return detection.categories[0].display_name

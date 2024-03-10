@@ -1,13 +1,16 @@
+from enum import Enum
 import cv2
 import argparse
 import logging
 import os
+from api_server import APIServer
 import utils.utils as utils
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
 from input_output.input_source import InputSource
 from input_output.dashcam import Dashcam
 from inference.inference import Inference
+from dataclasses import dataclass
 
 
 # File config
@@ -57,13 +60,38 @@ ACTIONS_DICT = {
 }
 
 
+class Status(Enum):
+    IDLE = "idle"
+    RECOVERY = "recovery"
+    INFERENCE = "inference"
+
+
+# API Data
+@dataclass
+class APIData:
+    status: str
+    trafficLightColor: str | None
+    recoveryPercent: int
+    fps: int
+
+
+apiData = APIData(status="idle", trafficLightColor=None, recoveryPercent=0, fps=0)
+
+
 def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
     utils.playSound("sounds/startup.mp3", wait=True)
 
+    # Start the server
+    apiServer = APIServer(apiData)
+    apiServer.start()
+
     # Start recovery as soon as the program starts
     videoRecovery = VideoRecovery(
-        recoveryFolder=RECOVERY_FOLDER, outputFolder=OUTPUT_FOLDER, fps=maxFps
+        recoveryFolder=RECOVERY_FOLDER,
+        outputFolder=OUTPUT_FOLDER,
+        apiData=apiData,
+        fps=maxFps,
     )
     videoRecovery.recoverVideo()
 
@@ -95,11 +123,13 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         maxFps=maxFps,
         categoriesDeniedList=[OFF.name],
         showPreview=showPreview,
+        apiData=apiData
     )
 
     utils.playSound("sounds/application_start.mp3")
 
     try:
+        apiData.status = Status.INFERENCE.value
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
             inference.infer()
 

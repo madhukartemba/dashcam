@@ -1,5 +1,6 @@
 import time
 import cv2
+from main import APIData
 import utils.utils as utils
 import threading
 import logging
@@ -22,6 +23,7 @@ class Inference:
         numThreads,
         actionsDict,
         maxFps,
+        apiData: APIData,
         categoriesDeniedList=None,
         showPreview=True,
     ) -> None:
@@ -50,6 +52,8 @@ class Inference:
 
         self.fps = 0
 
+        self.apiData = apiData
+
         pass
 
     def run(self):
@@ -74,6 +78,9 @@ class Inference:
         detections = self.detectionFilter.filter(detectionResult)
 
         detection = self.finalDecision.getDecision(detections)
+        if self.apiData:
+            self.apiData.trafficLightColor = utils.getCategory(detection).display_name
+            self.apiData.fps = self.fps
 
         self.actions.act(
             index=(
