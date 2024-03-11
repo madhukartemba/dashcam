@@ -128,6 +128,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         inference.stop()
         dashcam.stop()
         inputSource.stop()
+        apiServer.data.status = Status.IDLE.value
 
     pass
 
