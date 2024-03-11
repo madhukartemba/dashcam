@@ -13,7 +13,7 @@ class Status(Enum):
 @dataclass
 class APIData:
     status: str
-    trafficLightColor: str | None
+    trafficLightColor: str
     recoveryPercent: int
     fps: int
 
