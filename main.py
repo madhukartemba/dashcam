@@ -32,7 +32,6 @@ FPS = 30.0
 CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
-SHOW_PREVIEW = True
 
 # Labels
 RED = Label(0, "red")
@@ -161,8 +160,7 @@ if __name__ == "__main__":
         "--showPreview",
         help="Show the preview of the video.",
         required=False,
-        type=bool,
-        default=SHOW_PREVIEW,
+        action='store_true'
     )
     args = parser.parse_args()
     main(
