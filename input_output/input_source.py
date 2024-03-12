@@ -29,13 +29,21 @@ class InputSource:
         self.capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.image = None
         self.frameCount = 0
-        self.openCaptureCheck()
-        self.frameCount = int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT))
-        self.width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.fps = 0
         self.maxFps = maxFps
         self.lastTime = time.time()
+
+        try:
+            self.openCaptureCheck()
+            self.frameCount = int(self.capture.get(cv2.CAP_PROP_FRAME_COUNT))
+            self.width = int(self.capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+            self.height = int(self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        except Exception as e:
+            self.stopEvent.set()
+            utils.playSound("sounds/error.mp3")
+            print(e)
+            logging.error(e)
+            return
 
     def isCaptureOpen(self):
         return self.capture.isOpened()
