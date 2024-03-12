@@ -22,7 +22,7 @@ LOGS_FOLDER = "logs"
 if not os.path.exists(LOGS_FOLDER):
     os.makedirs(LOGS_FOLDER)
 logging.basicConfig(
-    filename=os.path.join(LOGS_FOLDER, "errors.log"),
+    filename=os.path.join(LOGS_FOLDER, "errors_log.log"),
     level=logging.ERROR,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
@@ -133,7 +133,6 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             print(e)
             logging.error(e)
             
-
     pass
 
 
