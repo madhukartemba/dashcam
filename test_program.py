@@ -118,7 +118,7 @@ if __name__ == "__main__":
         "--model",
         help="Path of the object detection model.",
         required=False,
-        default="models/3rdMar2024/traffic_3rdMar2024.tflite",
+        default="models/12thMar2024/traffic_12thMar2024.tflite",
     )
     parser.add_argument(
         "--source",
