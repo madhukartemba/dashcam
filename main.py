@@ -114,7 +114,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
             inference.infer()
 
-            if SHOW_PREVIEW and cv2.waitKey(1) == ord("q"):
+            if showPreview and cv2.waitKey(1) == ord("q"):
                 break
 
     except KeyboardInterrupt:
