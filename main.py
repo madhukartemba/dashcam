@@ -59,56 +59,55 @@ ACTIONS_DICT = {
 
 
 def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
-
-    utils.playSound("sounds/startup.mp3", wait=True)
-
-    # Start the server
-    apiServer = APIServer()
-    apiServer.start()
-
-    # Start recovery as soon as the program starts
-    videoRecovery = VideoRecovery(
-        recoveryFolder=RECOVERY_FOLDER,
-        outputFolder=OUTPUT_FOLDER,
-        apiData=apiServer.data,
-        fps=maxFps,
-    )
-    videoRecovery.recoverVideo()
-
-    # Open input source
-    inputSource = InputSource(
-        videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=maxFps
-    )
-    inputSource.start()
-
-    # Start up dashcam recording
-    dashcam = Dashcam(
-        inputSource,
-        fileDuration=FILE_DURATION,
-        outputFolder=OUTPUT_FOLDER,
-        recoveryFolder=RECOVERY_FOLDER,
-        fps=maxFps,
-    )
-    dashcam.start()
-
-    # Start inference
-    inference = Inference(
-        inputSource=inputSource,
-        indexPriority=[GREEN.index, YELLOW.index, RED.index, OFF.index],
-        model=MODEL,
-        scoreThreshold=SCORE_THRESHOLD,
-        maxResults=MAX_RESULTS,
-        numThreads=numThreads,
-        actionsDict=ACTIONS_DICT,
-        maxFps=maxFps,
-        categoriesDeniedList=[OFF.name],
-        showPreview=showPreview,
-        apiData=apiServer.data
-    )
-
-    utils.playSound("sounds/application_start.mp3")
-
     try:
+        utils.playSound("sounds/startup.mp3", wait=True)
+
+        # Start the server
+        apiServer = APIServer()
+        apiServer.start()
+
+        # Start recovery as soon as the program starts
+        videoRecovery = VideoRecovery(
+            recoveryFolder=RECOVERY_FOLDER,
+            outputFolder=OUTPUT_FOLDER,
+            apiData=apiServer.data,
+            fps=maxFps,
+        )
+        videoRecovery.recoverVideo()
+
+        # Open input source
+        inputSource = InputSource(
+            videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=maxFps
+        )
+        inputSource.start()
+
+        # Start up dashcam recording
+        dashcam = Dashcam(
+            inputSource,
+            fileDuration=FILE_DURATION,
+            outputFolder=OUTPUT_FOLDER,
+            recoveryFolder=RECOVERY_FOLDER,
+            fps=maxFps,
+        )
+        dashcam.start()
+
+        # Start inference
+        inference = Inference(
+            inputSource=inputSource,
+            indexPriority=[GREEN.index, YELLOW.index, RED.index, OFF.index],
+            model=MODEL,
+            scoreThreshold=SCORE_THRESHOLD,
+            maxResults=MAX_RESULTS,
+            numThreads=numThreads,
+            actionsDict=ACTIONS_DICT,
+            maxFps=maxFps,
+            categoriesDeniedList=[OFF.name],
+            showPreview=showPreview,
+            apiData=apiServer.data
+        )
+
+        utils.playSound("sounds/application_start.mp3")
+
         apiServer.data.status = Status.INFERENCE.value
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
             inference.infer()
@@ -123,11 +122,11 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         print(e)
         logging.error(e)
     finally:
+        apiServer.data.status = Status.IDLE.value
         inference.destroyWindow()
         inference.stop()
         dashcam.stop()
         inputSource.stop()
-        apiServer.data.status = Status.IDLE.value
 
     pass
 
