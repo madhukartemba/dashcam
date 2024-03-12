@@ -54,6 +54,9 @@ class InputSource:
         pass
 
     def start(self):
+        if self.stopEvent.is_set():
+            raise Exception("Capture has been closed before, cannot start capture!")
+
         self.thread = threading.Thread(target=self.captureFrames)
         self.thread.start()
         self.startedEvent.wait(timeout=10)
