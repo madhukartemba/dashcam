@@ -22,7 +22,7 @@ LOGS_FOLDER = "logs"
 if not os.path.exists(LOGS_FOLDER):
     os.makedirs(LOGS_FOLDER)
 logging.basicConfig(
-    filename=os.path.join(LOGS_FOLDER, "errors_log.log"),
+    filename=os.path.join(LOGS_FOLDER, "errors.log"),
     level=logging.ERROR,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
