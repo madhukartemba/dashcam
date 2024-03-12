@@ -122,11 +122,17 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         print(e)
         logging.error(e)
     finally:
-        apiServer.data.status = Status.IDLE.value
-        inference.destroyWindow()
-        inference.stop()
-        dashcam.stop()
-        inputSource.stop()
+        try:
+            apiServer.data.status = Status.IDLE.value
+            inference.destroyWindow()
+            inference.stop()
+            dashcam.stop()
+            inputSource.stop()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(e)
+            logging.error(e)
+            
 
     pass
 
