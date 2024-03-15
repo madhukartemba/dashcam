@@ -39,7 +39,7 @@ class Inference:
         )
 
         self.detectionFilter = DetectionFilter(
-            inputSource.width, inputSource.height, maxAreaDivisor=16
+            inputSource.width, inputSource.height, maxAreaDivisor=128
         )
 
         self.finalDecision = FinalDecision(indexPriority)
