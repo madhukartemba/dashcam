@@ -4,6 +4,9 @@ from flask import Flask, jsonify
 import threading
 from dataclasses import dataclass
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 
 class Status(Enum):
     IDLE = "idle"
@@ -26,7 +29,6 @@ class APIServer:
     def __init__(self, data=apiData):
         self.data = data
         self.app = Flask(__name__)
-        self.app.logger.setLevel(logging.ERROR)
         self.thread = None
 
         @self.app.route("/", methods=["GET"])
