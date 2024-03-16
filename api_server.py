@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 from flask import Flask, jsonify
 import threading
@@ -25,7 +26,7 @@ class APIServer:
     def __init__(self, data=apiData):
         self.data = data
         self.app = Flask(__name__)
-        self.app.logger.disabled = True
+        self.app.logger.setLevel(logging.ERROR)
         self.thread = None
 
         @self.app.route("/", methods=["GET"])
