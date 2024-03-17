@@ -50,7 +50,7 @@ def run(
     width: int,
     height: int,
     numThreads: int,
-    outputFile: str | None,
+    outputFile: str,
     labels: Labels,
     actionsDict,
 ):

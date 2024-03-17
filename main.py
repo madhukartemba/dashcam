@@ -22,7 +22,7 @@ LOGS_FOLDER = "logs"
 if not os.path.exists(LOGS_FOLDER):
     os.makedirs(LOGS_FOLDER)
 logging.basicConfig(
-    filename=os.path.join(LOGS_FOLDER, "errors.log"),
+    filename=os.path.join(LOGS_FOLDER, "error.log"),
     level=logging.ERROR,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
@@ -41,7 +41,7 @@ OFF = Label(3, "off")
 
 # Inference
 MODEL = "models/16thMar2024/traffic_16thMar2024.tflite"
-SCORE_THRESHOLD = 0.55
+SCORE_THRESHOLD = 0.4
 MAX_RESULTS = 3
 NUM_THREADS = 2
 
