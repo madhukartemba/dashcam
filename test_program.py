@@ -146,7 +146,7 @@ if __name__ == "__main__":
         help="Number of CPU threads to run the model.",
         required=False,
         type=int,
-        default=2,
+        default=4,
     )
     parser.add_argument(
         "--output",
