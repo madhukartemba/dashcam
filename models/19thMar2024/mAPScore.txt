@@ -1,0 +1,78 @@
+Conversion completed!
+Starting inference on 421 images...
+Finished inferencing!
+/home/madhukar/Desktop/TFLite/mAP
+Calculating mAP at 0.50 IoU threshold...
+/home/madhukar/.local/lib/python3.10/site-packages/IPython/core/magics/osm.py:417: UserWarning: using dhist requires you to install the `pickleshare` library.
+  self.shell.db['dhist'] = compress_dhist(dhist)[-100:]
+92.97% = green AP 
+86.20% = off AP 
+94.44% = red AP 
+94.39% = yellow AP 
+mAP = 92.00%
+Calculating mAP at 0.55 IoU threshold...
+87.57% = green AP 
+81.08% = off AP 
+91.95% = red AP 
+93.36% = yellow AP 
+mAP = 88.49%
+Calculating mAP at 0.60 IoU threshold...
+81.79% = green AP 
+74.17% = off AP 
+88.05% = red AP 
+92.31% = yellow AP 
+mAP = 84.08%
+Calculating mAP at 0.65 IoU threshold...
+77.52% = green AP 
+68.46% = off AP 
+79.31% = red AP 
+84.02% = yellow AP 
+mAP = 77.33%
+Calculating mAP at 0.70 IoU threshold...
+65.24% = green AP 
+60.20% = off AP 
+62.77% = red AP 
+59.87% = yellow AP 
+mAP = 62.02%
+Calculating mAP at 0.75 IoU threshold...
+49.73% = green AP 
+47.62% = off AP 
+47.67% = red AP 
+33.03% = yellow AP 
+mAP = 44.51%
+Calculating mAP at 0.80 IoU threshold...
+28.91% = green AP 
+21.64% = off AP 
+28.25% = red AP 
+14.99% = yellow AP 
+mAP = 23.45%
+Calculating mAP at 0.85 IoU threshold...
+9.01% = green AP 
+8.38% = off AP 
+9.30% = red AP 
+2.02% = yellow AP 
+mAP = 7.18%
+Calculating mAP at 0.90 IoU threshold...
+1.82% = green AP 
+1.95% = off AP 
+1.05% = red AP 
+0.36% = yellow AP 
+mAP = 1.30%
+Calculating mAP at 0.95 IoU threshold...
+0.03% = green AP 
+0.12% = off AP 
+0.01% = red AP 
+0.00% = yellow AP 
+mAP = 0.04%
+
+***mAP Results***
+
+Class		Average mAP @ 0.5:0.95
+---------------------------------------
+red		50.28%
+green		49.46%
+yellow		47.44%
+off		44.98%
+
+Overall		48.04%
+
