@@ -38,30 +38,50 @@ class APIServer:
 
         @self.app.route("/", methods=["GET"])
         def getData():
-            return jsonify(self.data)
+            try:
+                return jsonify(self.data)
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
 
         @self.app.route("/videos", methods=["GET"])
         def getVideos():
-            videos = os.listdir("recordings")
-            return jsonify(videos)
+            try:
+                videos = os.listdir("recordings")
+                return jsonify(videos)
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
 
         @self.app.route("/videos/<videoName>", methods=["GET"])
         def getThumbnail(videoName):
-            video_path = os.path.join("recordings", videoName)
-            cap = cv2.VideoCapture(video_path)
-            success, frame = cap.read()
-            cap.release()
+            try:
+                video_path = os.path.join("recordings", videoName)
+                cap = cv2.VideoCapture(video_path)
+                success, frame = cap.read()
+                cap.release()
 
-            if success:
-                _, buffer = cv2.imencode(".jpg", frame)
-                return Response(buffer.tobytes(), mimetype="image/jpeg")
-            else:
-                return "Failed to generate thumbnail", 500
+                if success:
+                    _, buffer = cv2.imencode(".jpg", frame)
+                    return Response(buffer.tobytes(), mimetype="image/jpeg")
+                else:
+                    return "Failed to generate thumbnail", 500
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
 
         @self.app.route("/videos/<videoName>/source", methods=["GET"])
         def getVideoSource(videoName):
-            video_path = os.path.join("recordings", videoName)
-            return send_file(video_path, mimetype="video/mkv")
+            try:
+                video_path = os.path.join("recordings", videoName)
+                return send_file(video_path, mimetype="video/mkv")
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
 
     def start(self):
         def run_flask():
