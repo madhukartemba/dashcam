@@ -13,7 +13,7 @@ class Dashcam:
         inputSource,
         fileDuration=600,
         outputFolder="recordings",
-        recoveryFolder="recovery",
+        recoveryFolder: str = None,
         fps=30.0,
     ):
         self.fileDuration = fileDuration

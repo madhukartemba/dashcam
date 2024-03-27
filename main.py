@@ -86,7 +86,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             inputSource,
             fileDuration=FILE_DURATION,
             outputFolder=OUTPUT_FOLDER,
-            recoveryFolder=RECOVERY_FOLDER,
+            recoveryFolder=None,
             fps=maxFps,
         )
         dashcam.start()
