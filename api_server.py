@@ -55,7 +55,7 @@ class APIServer:
                 logging.error(e)
                 return str(e), 500
 
-        @self.app.route("/videos/<videoName>", methods=["GET"])
+        @self.app.route("/videos/<videoName>/thumbnail", methods=["GET"])
         def getThumbnail(videoName):
             try:
                 video_path = os.path.join("recordings", videoName)
@@ -73,7 +73,7 @@ class APIServer:
                 logging.error(e)
                 return str(e), 500
 
-        @self.app.route("/videos/<videoName>/source", methods=["GET"])
+        @self.app.route("/videos/<videoName>", methods=["GET"])
         def getVideoSource(videoName):
             try:
                 video_path = os.path.join("recordings", videoName)
