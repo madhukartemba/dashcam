@@ -61,7 +61,7 @@ class APIServer:
         @self.app.route("/videos/<videoName>/source", methods=["GET"])
         def getVideoSource(videoName):
             video_path = os.path.join("recordings", videoName)
-            return send_file(video_path, mimetype="video/mp4")
+            return send_file(video_path, mimetype="video/mkv")
 
     def start(self):
         def run_flask():
