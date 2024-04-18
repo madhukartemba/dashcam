@@ -64,7 +64,7 @@ def run(
     else:
         videoMaker = None
 
-    inferenceEngine = InferenceEngine(model, [off.name], numThreads, scoreThreshold=0.3)
+    inferenceEngine = InferenceEngine(model, None, numThreads, scoreThreshold=0.3)
 
     detectionFilter = DetectionFilter(inputSource.width, inputSource.height)
 
@@ -93,7 +93,7 @@ def run(
         utils.putText(image, fps_text, (24, 20))
 
         if detection != None:
-            image = utils.visualize(image, [detection])
+            image = utils.visualize(image, detections)
 
         if videoMaker:
             videoMaker.writeFrame(image)
@@ -118,7 +118,7 @@ if __name__ == "__main__":
         "--model",
         help="Path of the object detection model.",
         required=False,
-        default="models/12thMar2024/traffic_12thMar2024.tflite",
+        default="models/19thMar2024/traffic_19thMar2024.tflite",
     )
     parser.add_argument(
         "--source",
