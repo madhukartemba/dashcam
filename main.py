@@ -13,7 +13,7 @@ from inference.inference import Inference
 
 
 # File config
-RECOVERY_FOLDER = "recovery"
+# RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
 FILE_DURATION = 120
 
@@ -68,7 +68,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
         # Start recovery as soon as the program starts
         videoRecovery = VideoRecovery(
-            recoveryFolder=RECOVERY_FOLDER,
+            recoveryFolder=None,
             outputFolder=OUTPUT_FOLDER,
             apiData=apiServer.data,
             fps=maxFps,
