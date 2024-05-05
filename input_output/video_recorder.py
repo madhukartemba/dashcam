@@ -15,7 +15,7 @@ class VideoRecorder:
         inputSource,
         outputFile: str,
         fps: float = 30.0,
-        recoveryFolder: str = "recovery",
+        recoveryFolder: str = None,
     ) -> None:
         self.inputSource = inputSource
         self.outputFile = outputFile
@@ -84,8 +84,9 @@ class VideoRecorder:
     def start(self):
         self.mainThread = threading.Thread(target=self.recordVideo)
         self.mainThread.start()
-        self.recoveryThread = threading.Thread(target=self.recovery)
-        self.recoveryThread.start()
+        if self.recoveryFolder is not None:
+            self.recoveryThread = threading.Thread(target=self.recovery)
+            self.recoveryThread.start()
 
     def stop(self):
         self.stopEvent.set()

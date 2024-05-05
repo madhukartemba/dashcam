@@ -40,8 +40,8 @@ YELLOW = Label(2, "yellow")
 OFF = Label(3, "off")
 
 # Inference
-MODEL = "models/12thMar2024/traffic_12thMar2024.tflite"
-SCORE_THRESHOLD = 0.4
+MODEL = "models/19thMar2024/traffic_19thMar2024.tflite"
+SCORE_THRESHOLD = 0.3
 MAX_RESULTS = 3
 NUM_THREADS = 2
 
@@ -86,7 +86,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             inputSource,
             fileDuration=FILE_DURATION,
             outputFolder=OUTPUT_FOLDER,
-            recoveryFolder=RECOVERY_FOLDER,
+            recoveryFolder=None,
             fps=maxFps,
         )
         dashcam.start()

@@ -13,7 +13,7 @@ class Dashcam:
         inputSource,
         fileDuration=600,
         outputFolder="recordings",
-        recoveryFolder="recovery",
+        recoveryFolder: str = None,
         fps=30.0,
     ):
         self.fileDuration = fileDuration
@@ -32,7 +32,7 @@ class Dashcam:
     def record(self):
         try:
             while not self.stopEvent.is_set():
-                fileName = f"{int(time.time())}.mp4"
+                fileName = f"{int(time.time())}.mkv"
                 outputFile = os.path.join(self.outputFolder, fileName)
                 videoRecorder = VideoRecorder(
                     self.inputSource, outputFile, self.fps, self.recoveryFolder
