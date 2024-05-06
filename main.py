@@ -40,8 +40,8 @@ YELLOW = Label(2, "yellow")
 OFF = Label(3, "off")
 
 # Inference
-MODEL = "models/19thMar2024/traffic_19thMar2024.tflite"
-SCORE_THRESHOLD = 0.6
+MODEL = "models/12thMar2024/traffic_12thMar2024.tflite"
+SCORE_THRESHOLD = 0.3
 MAX_RESULTS = 3
 NUM_THREADS = 2
 
