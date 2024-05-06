@@ -41,7 +41,7 @@ OFF = Label(3, "off")
 
 # Inference
 MODEL = "models/19thMar2024/traffic_19thMar2024.tflite"
-SCORE_THRESHOLD = 0.3
+SCORE_THRESHOLD = 0.6
 MAX_RESULTS = 3
 NUM_THREADS = 2
 
