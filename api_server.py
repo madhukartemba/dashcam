@@ -28,7 +28,7 @@ class APIData:
 
 
 apiData = APIData(
-    status=Status.IDLE.value, trafficLightColor=None, recoveryPercent=0, fps=0
+    status=Status.IDLE.value, trafficLightColor=None, recoveryPercent=0, fps=0, cleanupPercent=0
 )
 
 
