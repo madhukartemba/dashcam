@@ -17,7 +17,7 @@ from inference.inference import Inference
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
 MAX_FOLDER_SIZE_BYTES = 48 * 1024 * 1024 * 1024 # 48GB
-FILE_DURATION = 120
+FILE_DURATION = 10 * 60 # 10 Minutes
 
 # Logging
 LOGS_FOLDER = "logs"
