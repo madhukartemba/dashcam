@@ -14,6 +14,7 @@ class Status(Enum):
     IDLE = "idle"
     RECOVERY = "recovery"
     INFERENCE = "inference"
+    CLEANUP = "cleanup"
 
 
 # API Data
@@ -22,6 +23,7 @@ class APIData:
     status: str
     trafficLightColor: str
     recoveryPercent: int
+    cleanupPercent: int
     fps: int
 
 

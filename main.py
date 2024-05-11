@@ -3,8 +3,9 @@ import cv2
 import argparse
 import logging
 import os
-from api_server import APIServer, Status
 import utils.utils as utils
+from api_server import APIServer, Status
+from cleanup.cleanup import Cleanup
 from inference.labels import Label
 from input_output.video_recovery import VideoRecovery
 from input_output.input_source import InputSource
@@ -15,6 +16,7 @@ from inference.inference import Inference
 # File config
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
+MAX_FOLDER_SIZE_BYTES = 48 * 1024 * 1024 * 1024 # 48GB
 FILE_DURATION = 120
 
 # Logging
@@ -65,6 +67,10 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         # Start the server
         apiServer = APIServer()
         apiServer.start()
+
+        # Cleanup old video files
+        cleanup = Cleanup(folderPath=OUTPUT_FOLDER, targetSizeBytes=MAX_FOLDER_SIZE_BYTES, apiData=apiServer.data)
+        cleanup.removeOldFiles()
 
         # Start recovery as soon as the program starts
         videoRecovery = VideoRecovery(
