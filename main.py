@@ -1,4 +1,5 @@
 from enum import Enum
+import time
 import cv2
 import argparse
 import logging
@@ -122,6 +123,8 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
             if apiServer.isClientActive():
                 inference.infer()
+            else:
+                time.sleep(1)
 
             if showPreview and cv2.waitKey(1) == ord("q"):
                 break
