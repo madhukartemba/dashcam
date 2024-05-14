@@ -1,5 +1,6 @@
 import logging
 from enum import Enum
+from datetime import datetime, timedelta
 from flask import Flask, jsonify, Response, send_file
 import threading
 import os
@@ -28,19 +29,26 @@ class APIData:
 
 
 apiData = APIData(
-    status=Status.IDLE.value, trafficLightColor=None, recoveryPercent=0, fps=0, cleanupPercent=0
+    status=Status.IDLE.value,
+    trafficLightColor=None,
+    recoveryPercent=0,
+    fps=0,
+    cleanupPercent=0,
 )
 
 
 class APIServer:
-    def __init__(self, data=apiData):
+    def __init__(self, data=apiData, activeClientThreshold=timedelta(seconds=10)):
         self.data = data
+        self.lastCall = datetime.now()
+        self.activeClientThreshold = activeClientThreshold
         self.app = Flask(__name__)
         self.thread = None
 
         @self.app.route("/", methods=["GET"])
         def getData():
             try:
+                self.lastCall = datetime.now()
                 return jsonify(self.data)
             except Exception as e:
                 print(e)
@@ -85,6 +93,10 @@ class APIServer:
                 logging.error(e)
                 return str(e), 500
 
+    def isClientActive(self):
+        delta = datetime.now() - self.lastCall
+        return delta < self.activeClientThreshold
+
     def start(self):
         def run_flask():
             self.app.run(host="0.0.0.0", threaded=True)
@@ -105,5 +117,5 @@ if __name__ == "__main__":
     data = APIDataExample(
         status="idle", trafficLightColor=None, recoveryPercent=0, fps=0
     )
-    api = APIServer(data)
+    api = APIServer(data=data, activeClientThreshold=timedelta(seconds=10))
     api.start()
