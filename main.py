@@ -16,8 +16,8 @@ from inference.inference import Inference
 # File config
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"
-MAX_FOLDER_SIZE_BYTES = 48 * 1024 * 1024 * 1024 # 48GB
-FILE_DURATION = 10 * 60 # 10 Minutes
+MAX_FOLDER_SIZE_BYTES = 48 * 1024 * 1024 * 1024  # 48GB
+FILE_DURATION = 10 * 60  # 10 Minutes
 
 # Logging
 LOGS_FOLDER = "logs"
@@ -69,7 +69,11 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         apiServer.start()
 
         # Cleanup old video files
-        cleanup = Cleanup(folderPath=OUTPUT_FOLDER, targetSizeBytes=MAX_FOLDER_SIZE_BYTES, apiData=apiServer.data)
+        cleanup = Cleanup(
+            folderPath=OUTPUT_FOLDER,
+            targetSizeBytes=MAX_FOLDER_SIZE_BYTES,
+            apiData=apiServer.data,
+        )
         cleanup.removeOldFiles()
 
         # Start recovery as soon as the program starts
@@ -109,14 +113,15 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             maxFps=maxFps,
             categoriesDeniedList=[OFF.name],
             showPreview=showPreview,
-            apiData=apiServer.data
+            apiData=apiServer.data,
         )
 
         utils.playSound("sounds/application_start.mp3")
 
         apiServer.data.status = Status.INFERENCE.value
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
-            inference.infer()
+            if apiServer.isClientActive():
+                inference.infer()
 
             if showPreview and cv2.waitKey(1) == ord("q"):
                 break
@@ -138,7 +143,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             utils.playSound("sounds/error.mp3")
             print(e)
             logging.error(e)
-            
+
     pass
 
 
@@ -170,7 +175,7 @@ if __name__ == "__main__":
         "--showPreview",
         help="Show the preview of the video.",
         required=False,
-        action='store_true'
+        action="store_true",
     )
     args = parser.parse_args()
     main(
