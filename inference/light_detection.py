@@ -1,5 +1,6 @@
 import logging
 import threading
+import time
 import cv2
 import numpy as np
 from api_server import APIData
@@ -29,6 +30,7 @@ class LightDetection:
                 averageBrightness = np.mean(grayImage)
                 self.darkMode = averageBrightness < self.thresholdBrightness
                 self.apiData.darkMode = self.darkMode
+                time.sleep(1)
         except Exception as e:
             print(e)
             logging.error(e)
