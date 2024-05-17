@@ -18,6 +18,11 @@ class Status(Enum):
     CLEANUP = "cleanup"
 
 
+class LightMode(Enum):
+    BRIGHT = "bright"
+    DARK = "dark"
+
+
 # API Data
 @dataclass
 class APIData:
@@ -26,7 +31,7 @@ class APIData:
     recoveryPercent: int
     cleanupPercent: int
     fps: int
-    darkMode: bool
+    lightMode: str
 
 
 apiData = APIData(
@@ -35,7 +40,7 @@ apiData = APIData(
     recoveryPercent=0,
     fps=0,
     cleanupPercent=0,
-    darkMode=True,
+    lightMode=LightMode.DARK.value,
 )
 
 
