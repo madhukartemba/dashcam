@@ -1,5 +1,7 @@
 import logging
 import threading
+import cv2
+import numpy as np
 from input_output.input_source import InputSource
 
 log = logging.getLogger("werkzeug")
