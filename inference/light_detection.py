@@ -36,6 +36,7 @@ class LightDetection:
 
     def start(self):
         self.thread = threading.Thread(target=self.detect)
+        self.thread.start()
 
     def stop(self):
         self.stopEvent.set()
