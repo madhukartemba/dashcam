@@ -4,6 +4,7 @@ import cv2
 import argparse
 import logging
 import os
+from inference.light_detection import LightDetection
 import utils.utils as utils
 from api_server import APIServer, Status
 from cleanup.cleanup import Cleanup
@@ -117,6 +118,10 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             apiData=apiServer.data,
         )
 
+        # Start light detection
+        lightDetection = LightDetection(inputSource=inputSource, apiData=apiServer.data)
+        lightDetection.start()
+
         utils.playSound("sounds/application_start.mp3")
 
         apiServer.data.status = Status.INFERENCE.value
@@ -138,6 +143,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
     finally:
         try:
             apiServer.data.status = Status.IDLE.value
+            lightDetection.stop()
             inference.destroyWindow()
             inference.stop()
             dashcam.stop()

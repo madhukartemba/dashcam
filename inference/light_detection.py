@@ -9,7 +9,7 @@ log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
 
-class DayNightDetection:
+class LightDetection:
     def __init__(
         self, inputSource: InputSource, apiData: APIData, thresholdBrightness=50
     ):
