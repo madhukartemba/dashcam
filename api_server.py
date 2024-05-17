@@ -26,6 +26,7 @@ class APIData:
     recoveryPercent: int
     cleanupPercent: int
     fps: int
+    darkMode: bool
 
 
 apiData = APIData(
@@ -34,6 +35,7 @@ apiData = APIData(
     recoveryPercent=0,
     fps=0,
     cleanupPercent=0,
+    darkMode=True,
 )
 
 
