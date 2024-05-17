@@ -126,7 +126,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
         apiServer.data.status = Status.INFERENCE.value
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
-            if apiServer.isClientActive():
+            if apiServer.isClientActive() or showPreview:
                 inference.infer()
             else:
                 time.sleep(1)
