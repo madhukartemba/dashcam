@@ -1,6 +1,8 @@
 # Smart Dashcam
 A dashcam with smart features
 
+## Version
+1.0
 
 ## Installation
 ### Run the setup.sh file present in the setup folder.
