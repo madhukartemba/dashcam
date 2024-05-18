@@ -16,7 +16,7 @@ class LightDetection:
         inputSource: InputSource,
         apiData: APIData,
         thresholdBrightnessDark=75,
-        thresholdBrightnessLight=150,
+        thresholdBrightnessLight=120,
     ):
         self.thread = None
         self.inputSource = inputSource
