@@ -12,12 +12,18 @@ log.setLevel(logging.ERROR)
 
 class LightDetection:
     def __init__(
-        self, inputSource: InputSource, apiData: APIData, thresholdBrightness=100
+        self,
+        inputSource: InputSource,
+        apiData: APIData,
+        thresholdBrightnessDark=75,
+        thresholdBrightnessLight=150,
     ):
         self.thread = None
         self.inputSource = inputSource
         self.stopEvent = threading.Event()
-        self.thresholdBrightness = thresholdBrightness
+        self.thresholdBrightnessDark = thresholdBrightnessDark
+        self.thresholdBrightnessLight = thresholdBrightnessLight
+        self.lightMode = LightMode.DARK.value
         self.apiData = apiData
         pass
 
@@ -27,10 +33,17 @@ class LightDetection:
                 image = self.inputSource.getImage()
                 grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                 averageBrightness = np.mean(grayImage)
-                if averageBrightness < self.thresholdBrightness:
-                    self.apiData.lightMode = LightMode.DARK.value
-                else:
-                    self.apiData.lightMode = LightMode.BRIGHT.value
+                if (
+                    self.lightMode == LightMode.DARK.value
+                    and averageBrightness > self.thresholdBrightnessLight
+                ):
+                    self.lightMode = LightMode.BRIGHT.value
+                elif (
+                    self.lightMode == LightMode.BRIGHT.value
+                    and averageBrightness < self.thresholdBrightnessDark
+                ):
+                    self.lightMode = LightMode.DARK.value
+                self.apiData.lightMode = self.lightMode
                 time.sleep(1)
         except Exception as e:
             print(e)
