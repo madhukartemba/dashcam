@@ -1,6 +1,6 @@
 import time
 import cv2
-from api_server import APIData
+from api_server import InferenceData
 import utils.utils as utils
 import threading
 import logging
@@ -23,7 +23,7 @@ class Inference:
         numThreads,
         actionsDict,
         maxFps,
-        apiData: APIData,
+        apiData: InferenceData,
         categoriesDeniedList=None,
         showPreview=True,
     ) -> None:

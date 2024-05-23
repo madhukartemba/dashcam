@@ -74,7 +74,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         cleanup = Cleanup(
             folderPath=OUTPUT_FOLDER,
             targetSizeBytes=MAX_FOLDER_SIZE_BYTES,
-            apiData=apiServer.data,
+            apiData=apiServer.data.inferenceData,
         )
         cleanup.removeOldFiles()
 
@@ -82,7 +82,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         videoRecovery = VideoRecovery(
             recoveryFolder=RECOVERY_FOLDER,
             outputFolder=OUTPUT_FOLDER,
-            apiData=apiServer.data,
+            apiData=apiServer.data.inferenceData,
             fps=maxFps,
         )
         videoRecovery.recoverVideo()
@@ -115,16 +115,16 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             maxFps=maxFps,
             categoriesDeniedList=[OFF.name],
             showPreview=showPreview,
-            apiData=apiServer.data,
+            apiData=apiServer.data.inferenceData,
         )
 
         # Start light detection
-        lightDetection = LightDetection(inputSource=inputSource, apiData=apiServer.data)
+        lightDetection = LightDetection(inputSource=inputSource, apiData=apiServer.data.lightModeData)
         lightDetection.start()
 
         utils.playSound("sounds/application_start.mp3")
 
-        apiServer.data.status = Status.INFERENCE.value
+        apiServer.data.inferenceData.status = Status.INFERENCE.value
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
             if apiServer.isClientActive() or showPreview:
                 inference.infer()
@@ -142,7 +142,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         logging.error(e)
     finally:
         try:
-            apiServer.data.status = Status.IDLE.value
+            apiServer.data.inferenceData.status = Status.IDLE.value
             lightDetection.stop()
             inference.destroyWindow()
             inference.stop()

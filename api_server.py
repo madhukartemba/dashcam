@@ -23,29 +23,43 @@ class LightMode(Enum):
     DARK = "dark"
 
 
-# API Data
 @dataclass
-class APIData:
+class InferenceData:
     status: str
     trafficLightColor: str
     recoveryPercent: int
     cleanupPercent: int
     fps: int
+
+
+@dataclass
+class LightModeData:
     lightMode: str
 
 
-apiData = APIData(
-    status=Status.IDLE.value,
-    trafficLightColor=None,
-    recoveryPercent=0,
-    fps=0,
-    cleanupPercent=0,
-    lightMode=LightMode.DARK.value,
+@dataclass
+class Data:
+    inferenceData: InferenceData
+    lightModeData: LightModeData
+
+
+# Initialize the combined data object
+data = Data(
+    inferenceData=InferenceData(
+        status=Status.IDLE.value,
+        trafficLightColor=None,
+        recoveryPercent=0,
+        fps=0,
+        cleanupPercent=0,
+    ),
+    lightModeData=LightModeData(
+        lightMode=LightMode.DARK.value,
+    ),
 )
 
 
 class APIServer:
-    def __init__(self, data=apiData, activeClientThreshold=timedelta(seconds=10)):
+    def __init__(self, data=data, activeClientThreshold=timedelta(seconds=10)):
         self.data = data
         self.lastCall = datetime.now()
         self.activeClientThreshold = activeClientThreshold
@@ -53,10 +67,19 @@ class APIServer:
         self.thread = None
 
         @self.app.route("/", methods=["GET"])
-        def getData():
+        def getInferenceData():
             try:
                 self.lastCall = datetime.now()
-                return jsonify(self.data)
+                return jsonify(self.data.inferenceData)
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
+
+        @self.app.route("/lightMode", methods=["GET"])
+        def getLightModeData():
+            try:
+                return jsonify(self.data.lightModeData)
             except Exception as e:
                 print(e)
                 logging.error(e)
@@ -114,15 +137,5 @@ class APIServer:
 
 if __name__ == "__main__":
 
-    @dataclass
-    class APIDataExample:
-        status: str
-        trafficLightColor: str
-        recoveryPercent: int
-        fps: int
-
-    data = APIDataExample(
-        status="idle", trafficLightColor=None, recoveryPercent=0, fps=0
-    )
-    api = APIServer(data=data, activeClientThreshold=timedelta(seconds=10))
+    api = APIServer(ctiveClientThreshold=timedelta(seconds=10))
     api.start()

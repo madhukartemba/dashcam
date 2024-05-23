@@ -1,11 +1,11 @@
 import os
 import sys
 
-from api_server import APIData, Status
+from api_server import InferenceData, Status
 
 
 class Cleanup:
-    def __init__(self, folderPath, targetSizeBytes, apiData: APIData):
+    def __init__(self, folderPath, targetSizeBytes, apiData: InferenceData):
         self.folderPath = folderPath
         self.targetSizeBytes = targetSizeBytes
         self.apiData = apiData

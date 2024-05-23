@@ -3,7 +3,7 @@ import threading
 import time
 import cv2
 import numpy as np
-from api_server import APIData, LightMode
+from api_server import LightMode, LightModeData
 from input_output.input_source import InputSource
 
 log = logging.getLogger("werkzeug")
@@ -14,7 +14,7 @@ class LightDetection:
     def __init__(
         self,
         inputSource: InputSource,
-        apiData: APIData,
+        apiData: LightModeData,
         thresholdBrightnessDark=75,
         thresholdBrightnessLight=120,
     ):

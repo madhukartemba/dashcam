@@ -3,14 +3,14 @@ import cv2
 import os
 import shutil
 import re
-from api_server import APIData, Status
+from api_server import InferenceData, Status
 import utils.utils as utils
 from input_output.video_maker import VideoMaker
 
 
 class VideoRecovery:
     def __init__(
-        self, recoveryFolder: str, outputFolder: str, apiData: APIData, fps: float = 30.0
+        self, recoveryFolder: str, outputFolder: str, apiData: InferenceData, fps: float = 30.0
     ) -> None:
         self.recoveryFolder = recoveryFolder
         self.outputFolder = outputFolder
