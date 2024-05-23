@@ -89,7 +89,7 @@ class APIServer:
         def getVideos():
             try:
                 videos = os.listdir("recordings")
-                return jsonify(videos)
+                return jsonify({"videoNames": videos})
             except Exception as e:
                 print(e)
                 logging.error(e)
