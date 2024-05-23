@@ -15,10 +15,12 @@ class LightDetection:
         self,
         inputSource: InputSource,
         apiData: LightModeData,
+        fps: float = 1,
         thresholdBrightnessDark=75,
         thresholdBrightnessLight=120,
     ):
         self.thread = None
+        self.refreshInterval = 1 / fps
         self.inputSource = inputSource
         self.stopEvent = threading.Event()
         self.thresholdBrightnessDark = thresholdBrightnessDark
@@ -44,7 +46,7 @@ class LightDetection:
                 ):
                     self.lightMode = LightMode.DARK.value
                 self.apiData.lightMode = self.lightMode
-                time.sleep(1)
+                time.sleep(self.refreshInterval)
         except Exception as e:
             print(e)
             logging.error(e)
