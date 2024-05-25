@@ -59,7 +59,7 @@ data = Data(
 
 
 class APIServer:
-    def __init__(self, data=data, activeClientThreshold=timedelta(seconds=10)):
+    def __init__(self, data=data, activeClientThreshold=timedelta(seconds=1)):
         self.data = data
         self.lastCall = datetime.now()
         self.activeClientThreshold = activeClientThreshold
