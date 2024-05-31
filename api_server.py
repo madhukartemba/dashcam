@@ -137,5 +137,5 @@ class APIServer:
 
 if __name__ == "__main__":
 
-    api = APIServer(ctiveClientThreshold=timedelta(seconds=10))
+    api = APIServer(activeClientThreshold=timedelta(seconds=10))
     api.start()
