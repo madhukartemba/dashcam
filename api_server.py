@@ -68,7 +68,12 @@ data = Data(
 
 
 class APIServer:
-    def __init__(self, inputSource:InputSource, data=data, activeClientThreshold=timedelta(seconds=3)):
+    def __init__(
+        self,
+        inputSource: InputSource,
+        data=data,
+        activeClientThreshold=timedelta(seconds=3),
+    ):
         self.data = data
         self.lastCall = datetime.now()
         self.activeClientThreshold = activeClientThreshold
@@ -178,7 +183,8 @@ class APIServer:
                 print(e)
                 logging.error(e)
                 return str(e), 500
-        @self.app.route('/currentImage', ['GET'])
+
+        @self.app.route("/currentImage", methods=["GET"])
         def getCurrentImage():
             try:
                 image = self.inputSource.getImage()
