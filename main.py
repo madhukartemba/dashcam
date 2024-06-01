@@ -82,7 +82,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
         # Open input source
         inputSource = InputSource(
-            videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=maxFps
+            videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=6
         )
         inputSource.start()
 
