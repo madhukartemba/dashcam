@@ -1,3 +1,6 @@
+# Software version
+VERSION = '1.0'
+
 # File config
 RECOVERY_FOLDER = "recovery"
 OUTPUT_FOLDER = "recordings"

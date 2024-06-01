@@ -6,7 +6,7 @@ import threading
 import os
 import cv2
 from dataclasses import dataclass
-from constants import OUTPUT_FOLDER
+from constants import MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, VERSION
 
 
 log = logging.getLogger("werkzeug")
@@ -129,6 +129,27 @@ class APIServer:
                     return "Video not found", 404
                 
                 return send_file(video_path, mimetype="video/mkv")
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
+
+        @self.app.route("/info", methods=["GET"])
+        def getInfo():
+            try:
+                currentSize = 0
+                if os.path.exists(OUTPUT_FOLDER):
+                    for dirpath, dirnames, filenames in os.walk(OUTPUT_FOLDER):
+                        for f in filenames:
+                            fp = os.path.join(dirpath, f)
+                            currentSize += os.path.getsize(fp)
+                
+                info = {
+                    "version": VERSION,
+                    "currentRecordingsSize": currentSize,
+                    "maxRecordingsSize": MAX_FOLDER_SIZE_BYTES
+                }
+                return jsonify(info)
             except Exception as e:
                 print(e)
                 logging.error(e)
