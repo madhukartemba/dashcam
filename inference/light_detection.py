@@ -15,12 +15,12 @@ class LightDetection:
         self,
         inputSource: InputSource,
         apiData: LightModeData,
-        refreshInterval: float = 1,
+        fps: float = 1,
         thresholdBrightnessDark=75,
         thresholdBrightnessLight=120,
     ):
         self.thread = None
-        self.refreshInterval = refreshInterval
+        self.refreshInterval = 1 / fps
         self.inputSource = inputSource
         self.stopEvent = threading.Event()
         self.thresholdBrightnessDark = thresholdBrightnessDark

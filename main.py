@@ -113,7 +113,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
 
         # Start light detection
         lightDetection = LightDetection(
-            inputSource=inputSource, apiData=apiServer.data.lightModeData, refreshInterval=1
+            inputSource=inputSource, apiData=apiServer.data.lightModeData, fps=maxFps
         )
         lightDetection.start()
 
