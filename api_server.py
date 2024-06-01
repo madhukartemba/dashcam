@@ -102,6 +102,9 @@ class APIServer:
         def getThumbnail(videoName):
             try:
                 video_path = os.path.join("recordings", videoName)
+                if not os.path.exists(video_path):
+                    return "Video not found", 404
+                
                 cap = cv2.VideoCapture(video_path)
                 success, frame = cap.read()
                 cap.release()
@@ -120,6 +123,9 @@ class APIServer:
         def getVideoSource(videoName):
             try:
                 video_path = os.path.join("recordings", videoName)
+                if not os.path.exists(video_path):
+                    return "Video not found", 404
+                
                 return send_file(video_path, mimetype="video/mkv")
             except Exception as e:
                 print(e)
