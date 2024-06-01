@@ -7,6 +7,8 @@ import os
 import cv2
 from dataclasses import dataclass
 
+from main import OUTPUT_FOLDER
+
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
@@ -88,10 +90,10 @@ class APIServer:
         @self.app.route("/videos", methods=["GET"])
         def getVideos():
             try:
-                if not os.path.exists("recordings"):
+                if not os.path.exists(OUTPUT_FOLDER):
                     return jsonify({"videoNames": []})
                 
-                videos = os.listdir("recordings")
+                videos = os.listdir(OUTPUT_FOLDER)
                 return jsonify({"videoNames": videos})
             except Exception as e:
                 print(e)
@@ -101,7 +103,7 @@ class APIServer:
         @self.app.route("/videos/<videoName>/thumbnail", methods=["GET"])
         def getThumbnail(videoName):
             try:
-                video_path = os.path.join("recordings", videoName)
+                video_path = os.path.join(OUTPUT_FOLDER, videoName)
                 if not os.path.exists(video_path):
                     return "Video not found", 404
                 
@@ -122,7 +124,7 @@ class APIServer:
         @self.app.route("/videos/<videoName>", methods=["GET"])
         def getVideoSource(videoName):
             try:
-                video_path = os.path.join("recordings", videoName)
+                video_path = os.path.join(OUTPUT_FOLDER, videoName)
                 if not os.path.exists(video_path):
                     return "Video not found", 404
                 
