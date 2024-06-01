@@ -28,6 +28,7 @@ class InputSource:
 
         self.capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         self.image = None
+        self.imageCopy = None
         self.frameCount = 0
         self.fps = 0
         self.maxFps = maxFps
@@ -96,6 +97,9 @@ class InputSource:
             raise Exception("Capture failed")
 
         self.image = image
+        # detaching the image from the original image
+        # make it thread unsafe
+        self.imageCopy = image.copy()
 
         # Calculate FPS
         currentTime = time.time()
@@ -107,6 +111,9 @@ class InputSource:
 
     def getImage(self):
         return self.image
+    
+    def getImageCopy(self):
+        return self.imageCopy
 
     def releaseCapture(self):
         self.capture.release()

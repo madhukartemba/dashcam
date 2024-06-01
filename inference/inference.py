@@ -68,7 +68,7 @@ class Inference:
         if isinstance(self.inputSource, InputSourceProcess):
             image = self.inputSource.requestImage()
         else:
-            image = self.inputSource.getImage()
+            image = self.inputSource.getImageCopy()
 
         self.finalDecision.updateMinCount(int(self.fps))
         self.actions.updateBufferSize(int(10 * self.fps))

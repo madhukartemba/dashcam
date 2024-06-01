@@ -76,7 +76,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             recoveryFolder=RECOVERY_FOLDER,
             outputFolder=OUTPUT_FOLDER,
             apiData=apiServer.data.inferenceData,
-            fps=maxFps,
+            fps=6,
         )
         videoRecovery.recoverVideo()
 
@@ -92,7 +92,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             fileDuration=FILE_DURATION,
             outputFolder=OUTPUT_FOLDER,
             recoveryFolder=None,
-            fps=maxFps,
+            fps=6,
         )
         dashcam.start()
 
