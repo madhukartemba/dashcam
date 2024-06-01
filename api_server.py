@@ -6,8 +6,8 @@ import threading
 import os
 import cv2
 from dataclasses import dataclass
+from constants import OUTPUT_FOLDER
 
-from main import OUTPUT_FOLDER
 
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
