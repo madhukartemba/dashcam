@@ -106,6 +106,7 @@ class InputSource:
         elapsedTime = currentTime - self.lastTime
         self.fps = 1 / elapsedTime
         self.lastTime = currentTime
+        print(self.fps);
 
         return image
 
