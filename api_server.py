@@ -13,6 +13,7 @@ from constants import (
     OUTPUT_FOLDER,
     VERSION,
 )
+from input_output.input_source import InputSource
 
 
 log = logging.getLogger("werkzeug")
@@ -67,10 +68,11 @@ data = Data(
 
 
 class APIServer:
-    def __init__(self, data=data, activeClientThreshold=timedelta(seconds=3)):
+    def __init__(self, inputSource:InputSource, data=data, activeClientThreshold=timedelta(seconds=3)):
         self.data = data
         self.lastCall = datetime.now()
         self.activeClientThreshold = activeClientThreshold
+        self.inputSource = inputSource
         self.app = Flask(__name__)
         self.thread = None
 
@@ -172,6 +174,16 @@ class APIServer:
                     log_contents = log_file.read()
 
                 return Response(log_contents, mimetype="text/plain")
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
+        @self.app.route('/currentImage', ['GET'])
+        def getCurrentImage():
+            try:
+                image = self.inputSource.getImage()
+                _, buffer = cv2.imencode(".jpg", image)
+                return Response(buffer.tobytes(), mimetype="image/jpeg")
             except Exception as e:
                 print(e)
                 logging.error(e)
