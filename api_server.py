@@ -6,7 +6,13 @@ import threading
 import os
 import cv2
 from dataclasses import dataclass
-from constants import MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, VERSION
+from constants import (
+    LOG_FILENAME,
+    LOGS_FOLDER,
+    MAX_FOLDER_SIZE_BYTES,
+    OUTPUT_FOLDER,
+    VERSION,
+)
 
 
 log = logging.getLogger("werkzeug")
@@ -92,7 +98,7 @@ class APIServer:
             try:
                 if not os.path.exists(OUTPUT_FOLDER):
                     return jsonify({"videoNames": []})
-                
+
                 videos = os.listdir(OUTPUT_FOLDER)
                 return jsonify({"videoNames": videos})
             except Exception as e:
@@ -106,7 +112,7 @@ class APIServer:
                 video_path = os.path.join(OUTPUT_FOLDER, videoName)
                 if not os.path.exists(video_path):
                     return "Video not found", 404
-                
+
                 cap = cv2.VideoCapture(video_path)
                 success, frame = cap.read()
                 cap.release()
@@ -127,7 +133,7 @@ class APIServer:
                 video_path = os.path.join(OUTPUT_FOLDER, videoName)
                 if not os.path.exists(video_path):
                     return "Video not found", 404
-                
+
                 return send_file(video_path, mimetype="video/mkv")
             except Exception as e:
                 print(e)
@@ -143,13 +149,29 @@ class APIServer:
                         for f in filenames:
                             fp = os.path.join(dirpath, f)
                             currentSize += os.path.getsize(fp)
-                
+
                 info = {
                     "version": VERSION,
                     "currentRecordingsSize": currentSize,
-                    "maxRecordingsSize": MAX_FOLDER_SIZE_BYTES
+                    "maxRecordingsSize": MAX_FOLDER_SIZE_BYTES,
                 }
                 return jsonify(info)
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return str(e), 500
+
+        @self.app.route("/logs", methods=["GET"])
+        def getLogs():
+            try:
+                log_file_path = os.path.join(LOGS_FOLDER, LOG_FILENAME)
+                if not os.path.exists(log_file_path):
+                    return "Log file not found", 404
+
+                with open(log_file_path, "r") as log_file:
+                    log_contents = log_file.read()
+
+                return Response(log_contents, mimetype="text/plain")
             except Exception as e:
                 print(e)
                 logging.error(e)

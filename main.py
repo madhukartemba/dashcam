@@ -13,14 +13,13 @@ from input_output.video_recovery import VideoRecovery
 from input_output.input_source import InputSource
 from input_output.dashcam import Dashcam
 from inference.inference import Inference
-from constants import FILE_DURATION, MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, RECOVERY_FOLDER
+from constants import FILE_DURATION, LOG_FILENAME, LOGS_FOLDER, MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, RECOVERY_FOLDER
 
 # Logging
-LOGS_FOLDER = "logs"
 if not os.path.exists(LOGS_FOLDER):
     os.makedirs(LOGS_FOLDER)
 logging.basicConfig(
-    filename=os.path.join(LOGS_FOLDER, "error.log"),
+    filename=os.path.join(LOGS_FOLDER, LOG_FILENAME),
     level=logging.ERROR,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
