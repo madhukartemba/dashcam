@@ -88,6 +88,9 @@ class APIServer:
         @self.app.route("/videos", methods=["GET"])
         def getVideos():
             try:
+                if not os.path.exists("recordings"):
+                    return jsonify({"videoNames": []})
+                
                 videos = os.listdir("recordings")
                 return jsonify({"videoNames": videos})
             except Exception as e:
