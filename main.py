@@ -59,8 +59,14 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
     try:
         utils.playSound("sounds/startup.mp3", wait=True)
 
+
+        # Open input source
+        inputSource = InputSource(
+            videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=maxFps
+        )
+
         # Start the server
-        apiServer = APIServer()
+        apiServer = APIServer(inputSource=inputSource)
         apiServer.start()
 
         # Cleanup old video files
@@ -80,10 +86,6 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         )
         videoRecovery.recoverVideo()
 
-        # Open input source
-        inputSource = InputSource(
-            videoSource=cameraId, width=WIDTH, height=HEIGHT, maxFps=maxFps
-        )
         inputSource.start()
 
         # Start up dashcam recording
