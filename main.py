@@ -30,6 +30,9 @@ CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
 
+# Inference
+INFERENCE_FPS = 1.0
+
 # Labels
 RED = Label(0, "red")
 GREEN = Label(1, "green")
@@ -55,7 +58,7 @@ ACTIONS_DICT = {
 }
 
 
-def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
+def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferenceFps: float):
     try:
         utils.playSound("sounds/startup.mp3", wait=True)
 
@@ -106,7 +109,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
             maxResults=MAX_RESULTS,
             numThreads=numThreads,
             actionsDict=ACTIONS_DICT,
-            maxFps=maxFps,
+            maxFps=maxInferenceFps,
             categoriesDeniedList=[OFF.name],
             showPreview=showPreview,
             apiData=apiServer.data.inferenceData,
@@ -171,10 +174,17 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--maxFps",
-        help="Path to the output video file to save the processed frames.",
+        help="Max fps for videos.",
         required=False,
         type=float,
         default=FPS,
+    )
+    parser.add_argument(
+        "--maxInferenceFps",
+        help="Path to the output video file to save the processed frames.",
+        required=False,
+        type=float,
+        default=INFERENCE_FPS,
     )
     parser.add_argument(
         "--showPreview",
@@ -188,5 +198,6 @@ if __name__ == "__main__":
         maxFps=args.maxFps,
         numThreads=args.numThreads,
         showPreview=args.showPreview,
+        maxInferenceFps=args.maxInferenceFps,
     )
     pass
