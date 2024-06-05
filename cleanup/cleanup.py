@@ -15,12 +15,18 @@ class Cleanup:
         self.apiData = apiData
         self.storage = Storage(folderPath, cachePath)
 
-    def getFolderSize(self):
+    def getTotalSize(self):
         totalSize = 0
         for dirpath, dirnames, filenames in os.walk(self.folderPath):
             for f in filenames:
                 fp = os.path.join(dirpath, f)
                 totalSize += os.path.getsize(fp)
+
+        for dirpath, dirnames, filenames in os.walk(self.cachePath):
+            for f in filenames:
+                fp = os.path.join(dirpath, f)
+                totalSize += os.path.getsize(fp)
+
         return totalSize
 
     def removeOldFiles(self):
@@ -29,13 +35,13 @@ class Cleanup:
                 self.apiData.status = Status.CLEANUP.value
                 self.apiData.cleanupPercent = 0
 
-            folderSize = self.getFolderSize()
+            totalSize = self.getTotalSize()
 
-            overflowSize = folderSize - self.targetSizeBytes
+            overflowSize = totalSize - self.targetSizeBytes
 
-            while folderSize > self.targetSizeBytes:
+            while totalSize > self.targetSizeBytes:
                 if self.apiData:
-                    newOverflowSize = folderSize - self.targetSizeBytes
+                    newOverflowSize = totalSize - self.targetSizeBytes
                     self.apiData.cleanupPercent = (
                         1 - newOverflowSize / overflowSize
                     ) * 100
@@ -48,7 +54,7 @@ class Cleanup:
                 os.remove(os.path.join(self.folderPath, oldestFile))
                 self.storage.deleteVideoThumbnail(oldestFile)
                 print(f"Removed oldest file: {oldestFile}")
-                folderSize = self.getFolderSize()
+                totalSize = self.getTotalSize()
 
             if self.apiData:
                 self.apiData.status = Status.IDLE.value
