@@ -7,12 +7,14 @@ import os
 import cv2
 from dataclasses import dataclass
 from constants import (
+    CACHE_FOLDER,
     LOG_FILENAME,
     LOGS_FOLDER,
     MAX_FOLDER_SIZE_BYTES,
     OUTPUT_FOLDER,
     VERSION,
 )
+from storage.storage import Storage
 
 
 log = logging.getLogger("werkzeug")
@@ -73,6 +75,7 @@ class APIServer:
         self.activeClientThreshold = activeClientThreshold
         self.app = Flask(__name__)
         self.thread = None
+        self.storage = Storage(OUTPUT_FOLDER, CACHE_FOLDER)
 
         @self.app.route("/", methods=["GET"])
         def getInferenceData():
@@ -109,19 +112,12 @@ class APIServer:
         @self.app.route("/videos/<videoName>/thumbnail", methods=["GET"])
         def getThumbnail(videoName):
             try:
-                video_path = os.path.join(OUTPUT_FOLDER, videoName)
-                if not os.path.exists(video_path):
-                    return "Video not found", 404
+                image = self.storage.getVideoThumbnail(videoName)
 
-                cap = cv2.VideoCapture(video_path)
-                success, frame = cap.read()
-                cap.release()
+                if image is None:
+                    return "Video thumbnail not found", 404
 
-                if success:
-                    _, buffer = cv2.imencode(".jpg", frame)
-                    return Response(buffer.tobytes(), mimetype="image/jpeg")
-                else:
-                    return "Failed to generate thumbnail", 500
+                return Response(image, mimetype="image/jpeg")
             except Exception as e:
                 print(e)
                 logging.error(e)

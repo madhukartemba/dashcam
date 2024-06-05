@@ -21,3 +21,6 @@ __pycache__
 
 # Ignore DS_STORE
 .DS_STORE
+
+# Ignore cache folder
+cache/
