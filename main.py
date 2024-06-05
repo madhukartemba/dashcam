@@ -117,7 +117,7 @@ def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferen
 
         # Start light detection
         lightDetection = LightDetection(
-            inputSource=inputSource, apiData=apiServer.data.lightModeData, fps=maxFps
+            inputSource=inputSource, apiData=apiServer.data.lightModeData, fps=maxInferenceFps
         )
         lightDetection.start()
 
