@@ -1,7 +1,10 @@
+import logging
 import os
 import sys
 
 from api_server import InferenceData, Status
+from constants import CACHE_FOLDER, OUTPUT_FOLDER
+from storage.storage import Storage
 
 
 class Cleanup:
@@ -9,6 +12,7 @@ class Cleanup:
         self.folderPath = folderPath
         self.targetSizeBytes = targetSizeBytes
         self.apiData = apiData
+        self.storage = Storage(OUTPUT_FOLDER, CACHE_FOLDER)
 
     def getFolderSize(self):
         totalSize = 0
@@ -19,31 +23,38 @@ class Cleanup:
         return totalSize
 
     def removeOldFiles(self):
-        if self.apiData:
-            self.apiData.status = Status.CLEANUP.value
-            self.apiData.cleanupPercent = 0
-
-        folderSize = self.getFolderSize()
-
-        overflowSize = folderSize - self.targetSizeBytes
-
-        while folderSize > self.targetSizeBytes:
+        try:
             if self.apiData:
-                newOverflowSize = folderSize - self.targetSizeBytes
-                self.apiData.cleanupPercent = (1 - newOverflowSize / overflowSize) * 100
+                self.apiData.status = Status.CLEANUP.value
+                self.apiData.cleanupPercent = 0
 
-            files = [
-                (f, os.path.getmtime(os.path.join(self.folderPath, f)))
-                for f in os.listdir(self.folderPath)
-            ]
-            oldestFile = min(files, key=lambda x: x[1])[0]
-            os.remove(os.path.join(self.folderPath, oldestFile))
-            print(f"Removed oldest file: {oldestFile}")
             folderSize = self.getFolderSize()
 
-        if self.apiData:
-            self.apiData.status = Status.IDLE.value
-            self.apiData.cleanupPercent = 100
+            overflowSize = folderSize - self.targetSizeBytes
+
+            while folderSize > self.targetSizeBytes:
+                if self.apiData:
+                    newOverflowSize = folderSize - self.targetSizeBytes
+                    self.apiData.cleanupPercent = (
+                        1 - newOverflowSize / overflowSize
+                    ) * 100
+
+                files = [
+                    (f, os.path.getmtime(os.path.join(self.folderPath, f)))
+                    for f in os.listdir(self.folderPath)
+                ]
+                oldestFile = min(files, key=lambda x: x[1])[0]
+                os.remove(os.path.join(self.folderPath, oldestFile))
+                self.storage.deleteVideoThumbnail(oldestFile)
+                print(f"Removed oldest file: {oldestFile}")
+                folderSize = self.getFolderSize()
+
+            if self.apiData:
+                self.apiData.status = Status.IDLE.value
+                self.apiData.cleanupPercent = 100
+        except Exception as e:
+            print(e)
+            logging.error(e)
 
 
 if __name__ == "__main__":

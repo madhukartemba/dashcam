@@ -13,12 +13,11 @@ class Storage:
 
     def getVideoThumbnail(self, video_name: str):
         video_path = os.path.join(self.output_folder, video_name)
-        image_name,_ = os.path.splitext(video_name)
+        image_name, _ = os.path.splitext(video_name)
         thumbnail_path = os.path.join(self.cache_folder, f"{image_name}.jpg")
 
         # Check if the thumbnail is already cached
         if os.path.exists(thumbnail_path):
-            self.count = self.count + 1
             with open(thumbnail_path, "rb") as f:
                 return f.read()
 
@@ -38,5 +37,12 @@ class Storage:
         with open(thumbnail_path, "wb") as f:
             f.write(bytes)
         return bytes
-    
 
+    def deleteVideoThumbnail(self, video_name: str):
+        image_name, _ = os.path.splitext(video_name)
+        thumbnail_path = os.path.join(self.cache_folder, f"{image_name}.jpg")
+
+        if os.path.exists(thumbnail_path):
+            os.remove(thumbnail_path)
+            return True
+        return False
