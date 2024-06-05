@@ -103,11 +103,6 @@ class InputSource:
         self.fps = 1 / elapsedTime
         self.lastTime = currentTime
 
-        fps_text = "FPS = {:.1f}".format(self.fps)
-        utils.putText(image, fps_text, (24, 20))
-        cv2.imshow("Input", image)
-        cv2.waitKey(1)
-
         return image
 
     def getImage(self):
