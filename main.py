@@ -13,7 +13,7 @@ from input_output.video_recovery import VideoRecovery
 from input_output.input_source import InputSource
 from input_output.dashcam import Dashcam
 from inference.inference import Inference
-from constants import FILE_DURATION, LOG_FILENAME, LOGS_FOLDER, MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, RECOVERY_FOLDER
+from constants import CACHE_FOLDER, FILE_DURATION, LOG_FILENAME, LOGS_FOLDER, MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, RECOVERY_FOLDER
 
 # Logging
 if not os.path.exists(LOGS_FOLDER):
@@ -66,6 +66,7 @@ def main(maxFps: str, cameraId, numThreads: int, showPreview: bool):
         # Cleanup old video files
         cleanup = Cleanup(
             folderPath=OUTPUT_FOLDER,
+            cachePath=CACHE_FOLDER,
             targetSizeBytes=MAX_FOLDER_SIZE_BYTES,
             apiData=apiServer.data.inferenceData,
         )

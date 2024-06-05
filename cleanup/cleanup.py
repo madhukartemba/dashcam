@@ -8,11 +8,12 @@ from storage.storage import Storage
 
 
 class Cleanup:
-    def __init__(self, folderPath, targetSizeBytes, apiData: InferenceData):
+    def __init__(self, folderPath, cachePath, targetSizeBytes, apiData: InferenceData):
         self.folderPath = folderPath
+        self.cachePath = cachePath
         self.targetSizeBytes = targetSizeBytes
         self.apiData = apiData
-        self.storage = Storage(OUTPUT_FOLDER, CACHE_FOLDER)
+        self.storage = Storage(folderPath, cachePath)
 
     def getFolderSize(self):
         totalSize = 0
