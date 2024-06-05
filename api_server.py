@@ -140,15 +140,23 @@ class APIServer:
         def getInfo():
             try:
                 currentSize = 0
+                cacheSize = 0
                 if os.path.exists(OUTPUT_FOLDER):
                     for dirpath, dirnames, filenames in os.walk(OUTPUT_FOLDER):
                         for f in filenames:
                             fp = os.path.join(dirpath, f)
                             currentSize += os.path.getsize(fp)
 
+                if os.path.exists(CACHE_FOLDER):
+                    for dirpath, dirnames, filenames in os.walk(CACHE_FOLDER):
+                        for f in filenames:
+                            fp = os.path.join(dirpath, f)
+                            cacheSize += os.path.getsize(fp)
+
                 info = {
                     "version": VERSION,
                     "currentRecordingsSize": currentSize,
+                    "cacheSize": cacheSize,
                     "maxRecordingsSize": MAX_FOLDER_SIZE_BYTES,
                 }
                 return jsonify(info)
