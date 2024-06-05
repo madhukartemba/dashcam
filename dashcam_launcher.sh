@@ -10,4 +10,4 @@ git pull || true
 lxterminal --command="bash -c 'sleep 30; git pull || true'"
 
 # Start the Python script in a new lxterminal
-lxterminal --command="python main.py --maxFps=10.0 --maxInferenceFps=1.0"
+lxterminal --command="python main.py --maxFps=9.0 --maxInferenceFps=1.0"
