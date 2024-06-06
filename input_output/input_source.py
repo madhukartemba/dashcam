@@ -2,11 +2,14 @@ import logging
 import cv2
 import time
 import threading
+import queue
 import utils.utils as utils
 
 
 class InputSource:
-    def __init__(self, videoSource, width=None, height=None, maxFps=30.0) -> None:
+    def __init__(
+        self, videoSource, width=None, height=None, maxFps=30.0, bufferSize=10
+    ) -> None:
         self.videoSource = videoSource
 
         self.thread = None
@@ -27,7 +30,7 @@ class InputSource:
             self.capture = cv2.VideoCapture(videoSource)
 
         self.capture.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-        self.image = None
+        self.frameQueue = queue.Queue(maxsize=bufferSize)
         self.frameCount = 0
         self.fps = 0
         self.maxFps = maxFps
@@ -87,7 +90,6 @@ class InputSource:
             self.releaseCapture()
 
     def refreshFrame(self):
-
         self.openCaptureCheck()
 
         success, image = self.capture.read()
@@ -95,18 +97,22 @@ class InputSource:
         if success == False:
             raise Exception("Capture failed")
 
-        self.image = image
-
         # Calculate FPS
         currentTime = time.time()
         elapsedTime = currentTime - self.lastTime
         self.fps = 1 / elapsedTime
         self.lastTime = currentTime
 
-        return image
+        try:
+            self.frameQueue.put(image, timeout=1)
+        except queue.Full:
+            pass
 
     def getImage(self):
-        return self.image
+        try:
+            return self.frameQueue.get(timeout=1)
+        except queue.Empty:
+            return None
 
     def releaseCapture(self):
         self.capture.release()
@@ -154,5 +160,4 @@ if __name__ == "__main__":
         pass
     finally:
         cameraInputSource.stop()
-        cameraInputSource.releaseCapture()
-        cv2.destroyAllWindows()
+        cameraInputSource
