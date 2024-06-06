@@ -25,9 +25,14 @@ class Storage:
             return None
 
         # Generate the thumbnail if not cached
-        cap = cv2.VideoCapture(video_path)
-        _, frame = cap.read()
-        cap.release()
+        try:
+            cap = cv2.VideoCapture(video_path)
+            _, frame = cap.read()
+            cap.release()
+        except Exception as e:
+            print(e)
+            # Don't log this exception
+            return None
 
         _, buffer = cv2.imencode(".jpg", frame)
 
