@@ -66,3 +66,7 @@ class Storage:
         if os.path.exists(self.cache_folder):
             shutil.rmtree(self.cache_folder)
             print(f"Cache folder '{self.cache_folder}' deleted successfully.")
+            os.makedirs(self.cache_folder)
+            print(f"Cache folder '{self.cache_folder}' recreated successfully.")
+        else:
+            print(f"Cache folder '{self.cache_folder}' does not exist.")
