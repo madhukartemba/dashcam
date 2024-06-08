@@ -1,5 +1,5 @@
 # Software version
-VERSION = '1.1'
+VERSION = '1.2'
 
 # File config
 RECOVERY_FOLDER = "recovery"

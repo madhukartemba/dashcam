@@ -85,7 +85,7 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
 
         @self.app.route("/lightMode", methods=["GET"])
         def getLightModeData():
@@ -94,7 +94,7 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
 
         @self.app.route("/videos", methods=["GET"])
         def getVideos():
@@ -107,7 +107,7 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
 
         @self.app.route("/videos/<videoName>/thumbnail", methods=["GET"])
         def getThumbnail(videoName):
@@ -121,7 +121,7 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
 
         @self.app.route("/videos/<videoName>", methods=["GET"])
         def getVideoSource(videoName):
@@ -134,7 +134,7 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
 
         @self.app.route("/info", methods=["GET"])
         def getInfo():
@@ -163,7 +163,7 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
 
         @self.app.route("/logs", methods=["GET"])
         def getLogs():
@@ -179,7 +179,17 @@ class APIServer:
             except Exception as e:
                 print(e)
                 logging.error(e)
-                return str(e), 500
+                return Response(str(e), status=500)
+
+        @self.app.route("/cache", methods=["DELETE"])
+        def deleteCache():
+            try:
+                self.storage.deleteCache()
+                return Response(status=200)
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return Response(str(e), status=500)
 
     def isClientActive(self):
         delta = datetime.now() - self.lastCall
