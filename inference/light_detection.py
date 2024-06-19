@@ -17,7 +17,7 @@ class LightDetection:
         apiData: LightModeData,
         fps: float = 1,
         thresholdBrightnessDark=75,
-        thresholdBrightnessLight=120,
+        thresholdBrightnessLight=180,
     ):
         self.thread = None
         self.refreshInterval = 1 / fps
