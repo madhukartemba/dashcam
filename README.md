@@ -2,7 +2,7 @@
 A dashcam with smart features
 
 ## Version
-1.0
+1.3
 
 ## Installation
 ### Run the setup.sh file present in the setup folder.
