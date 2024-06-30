@@ -146,10 +146,12 @@ def main(
 
     except KeyboardInterrupt:
         print("Closing the application...")
+        return True
     except Exception as e:
         utils.playSound("sounds/error.mp3")
         print(e)
         logging.error(e)
+        return False
     finally:
         try:
             apiServer.data.inferenceData.status = Status.IDLE.value
@@ -246,13 +248,17 @@ if __name__ == "__main__":
 
     while True:
         try:
-            main(
-                cameraId=args.source,
-                maxFps=args.maxFps,
-                numThreads=args.numThreads,
-                showPreview=args.showPreview,
-                maxInferenceFps=args.maxInferenceFps,
-            )
+            if (
+                main(
+                    cameraId=args.source,
+                    maxFps=args.maxFps,
+                    numThreads=args.numThreads,
+                    showPreview=args.showPreview,
+                    maxInferenceFps=args.maxInferenceFps,
+                )
+                == True
+            ):
+                break
         except KeyboardInterrupt:
             print("Closing the main application...")
             break
