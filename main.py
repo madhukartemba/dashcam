@@ -247,6 +247,6 @@ if __name__ == "__main__":
             )
         except Exception as e:
             utils.playSound("sounds/error.mp3")
-            print(f"Error stopping dashcam: {e}")
-            logging.error(f"Error stopping dashcam: {e}")
+            print(f"Error stopping main function: {e}")
+            logging.error(f"Error stopping main function: {e}")
     pass
