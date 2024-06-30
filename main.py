@@ -134,7 +134,6 @@ def main(
         utils.playSound("sounds/application_start.mp3")
 
         apiServer.data.inferenceData.status = Status.INFERENCE.value
-        print(apiServer.data.inferenceData.status)
         while (not inputSource.stopEvent.is_set()) and (not dashcam.stopEvent.is_set()):
             if apiServer.isClientActive() or showPreview:
                 inference.infer()

@@ -31,10 +31,6 @@ class Cleanup:
 
     def removeOldFiles(self):
         try:
-            if self.apiData:
-                self.apiData.status = Status.CLEANUP.value
-                self.apiData.cleanupPercent = 0
-
             totalSize = self.getTotalSize()
 
             overflowSize = totalSize - self.targetSizeBytes
@@ -55,11 +51,6 @@ class Cleanup:
                 self.storage.deleteVideoThumbnail(oldestFile)
                 print(f"Removed oldest file: {oldestFile}")
                 totalSize = self.getTotalSize()
-
-            if self.apiData:
-                print('In cleanup idle')
-                self.apiData.status = Status.IDLE.value
-                self.apiData.cleanupPercent = 100
         except Exception as e:
             print(e)
             logging.error(e)

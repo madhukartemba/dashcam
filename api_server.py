@@ -26,7 +26,6 @@ class Status(Enum):
     IDLE = "idle"
     RECOVERY = "recovery"
     INFERENCE = "inference"
-    CLEANUP = "cleanup"
 
 
 class LightMode(Enum):
