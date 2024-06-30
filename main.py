@@ -252,6 +252,8 @@ if __name__ == "__main__":
                 showPreview=args.showPreview,
                 maxInferenceFps=args.maxInferenceFps,
             )
+        except KeyboardInterrupt:
+            print("Closing the main application...")
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(f"Fatal exception occurred: {e}")
