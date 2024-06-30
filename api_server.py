@@ -199,6 +199,7 @@ class APIServer:
                 if shutdownFunction is None:
                     raise RuntimeError("Not running with the Werkzeug Server")
                 shutdownFunction()
+                return Response(status=200)
             except Exception as e:
                 print(e)
                 logging.error(e)
