@@ -1,7 +1,7 @@
 import logging
 from enum import Enum
 from datetime import datetime, timedelta
-from flask import Flask, jsonify, Response, send_file
+from flask import Flask, jsonify, Response, request, send_file
 import threading
 import os
 import cv2
@@ -202,6 +202,12 @@ class APIServer:
         self.thread = threading.Thread(target=run_flask)
         self.thread.start()
 
+    def shutdown(self):
+        shutdown_func = request.environ.get('werkzeug.server.shutdown')
+        if shutdown_func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        shutdown_func()
+        self.thread.join()
 
 if __name__ == "__main__":
 
