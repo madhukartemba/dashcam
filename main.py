@@ -30,9 +30,6 @@ CAMERA_ID = 0
 WIDTH = 1280
 HEIGHT = 720
 
-# Inference
-INFERENCE_FPS = 1.0
-
 # Labels
 RED = Label(0, "red")
 GREEN = Label(1, "green")
@@ -185,7 +182,6 @@ if __name__ == "__main__":
         help="Path to the output video file to save the processed frames.",
         required=False,
         type=float,
-        default=INFERENCE_FPS,
     )
     parser.add_argument(
         "--showPreview",
@@ -194,6 +190,10 @@ if __name__ == "__main__":
         action="store_true",
     )
     args = parser.parse_args()
+
+    if args.maxInferenceFps is None:
+        args.maxInferenceFps = args.maxFps
+
     main(
         cameraId=args.source,
         maxFps=args.maxFps,
