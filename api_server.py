@@ -1,9 +1,11 @@
 import logging
 from enum import Enum
 from datetime import datetime, timedelta
+import time
 from flask import Flask, jsonify, Response, request, send_file
 import threading
 import os
+import requests
 from dataclasses import dataclass
 from constants import (
     CACHE_FOLDER,
@@ -190,6 +192,18 @@ class APIServer:
                 logging.error(e)
                 return Response(str(e), status=500)
 
+        @self.app.route("/shutdown", methods=["GET"])
+        def shutdownServer():
+            try:
+                shutdownFunction = request.environ.get("werkzeug.server.shutdown")
+                if shutdownFunction is None:
+                    raise RuntimeError("Not running with the Werkzeug Server")
+                shutdownFunction()
+            except Exception as e:
+                print(e)
+                logging.error(e)
+                return Response(str(e), status=500)
+
     def isClientActive(self):
         delta = datetime.now() - self.lastCall
         return delta < self.activeClientThreshold
@@ -201,14 +215,13 @@ class APIServer:
         self.thread = threading.Thread(target=run_flask)
         self.thread.start()
 
-    def shutdown(self):
-        shutdown_func = request.environ.get('werkzeug.server.shutdown')
-        if shutdown_func is None:
-            raise RuntimeError('Not running with the Werkzeug Server')
-        shutdown_func()
+    def stop(self):
+        requests.get("http://127.0.0.1:5000/shutdown")
         self.thread.join()
 
 if __name__ == "__main__":
 
     api = APIServer(activeClientThreshold=timedelta(seconds=10))
     api.start()
+    time.sleep(10)
+    api.stop()
