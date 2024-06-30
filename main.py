@@ -93,6 +93,7 @@ def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferen
         # Start up dashcam recording
         dashcam = Dashcam(
             inputSource,
+            cleanup=cleanup,
             fileDuration=FILE_DURATION,
             outputFolder=OUTPUT_FOLDER,
             recoveryFolder=None,

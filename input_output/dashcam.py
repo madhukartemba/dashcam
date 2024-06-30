@@ -2,6 +2,7 @@ import logging
 import time
 import os
 import threading
+from cleanup.cleanup import Cleanup
 import utils.utils as utils
 from input_output.input_source import InputSource
 from input_output.video_recorder import VideoRecorder
@@ -11,6 +12,7 @@ class Dashcam:
     def __init__(
         self,
         inputSource,
+        cleanup:Cleanup,
         fileDuration=600,
         outputFolder="recordings",
         recoveryFolder: str = None,
@@ -18,6 +20,7 @@ class Dashcam:
     ):
         self.fileDuration = fileDuration
         self.inputSource = inputSource
+        self.cleanup = cleanup
 
         if not os.path.exists(outputFolder):
             os.makedirs(outputFolder)
@@ -32,6 +35,7 @@ class Dashcam:
     def record(self):
         try:
             while not self.stopEvent.is_set():
+                self.cleanup.removeOldFiles()
                 fileName = f"{int(time.time())}.mkv"
                 outputFile = os.path.join(self.outputFolder, fileName)
                 videoRecorder = VideoRecorder(
