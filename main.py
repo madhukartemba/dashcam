@@ -192,6 +192,13 @@ def main(
             print(f"Error stopping input source: {e}")
             logging.error(f"Error stopping input source: {e}")
 
+        try:
+            apiServer.stop()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error stopping API Server: {e}")
+            logging.error(f"Error stopping API Server: {e}")
+
     pass
 
 
