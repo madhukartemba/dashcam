@@ -13,7 +13,15 @@ from input_output.video_recovery import VideoRecovery
 from input_output.input_source import InputSource
 from input_output.dashcam import Dashcam
 from inference.inference import Inference
-from constants import CACHE_FOLDER, FILE_DURATION, LOG_FILENAME, LOGS_FOLDER, MAX_FOLDER_SIZE_BYTES, OUTPUT_FOLDER, RECOVERY_FOLDER
+from constants import (
+    CACHE_FOLDER,
+    FILE_DURATION,
+    LOG_FILENAME,
+    LOGS_FOLDER,
+    MAX_FOLDER_SIZE_BYTES,
+    OUTPUT_FOLDER,
+    RECOVERY_FOLDER,
+)
 
 # Logging
 if not os.path.exists(LOGS_FOLDER):
@@ -55,7 +63,9 @@ ACTIONS_DICT = {
 }
 
 
-def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferenceFps: float):
+def main(
+    maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferenceFps: float
+):
     try:
         utils.playSound("sounds/startup.mp3", wait=True)
 
@@ -115,7 +125,9 @@ def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferen
 
         # Start light detection
         lightDetection = LightDetection(
-            inputSource=inputSource, apiData=apiServer.data.lightModeData, fps=maxInferenceFps
+            inputSource=inputSource,
+            apiData=apiServer.data.lightModeData,
+            fps=maxInferenceFps,
         )
         lightDetection.start()
 
@@ -144,7 +156,7 @@ def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferen
             utils.playSound("sounds/error.mp3")
             print(f"Error setting status to IDLE: {e}")
             logging.error(f"Error setting status to IDLE: {e}")
-        
+
         try:
             lightDetection.stop()
         except Exception as e:
@@ -224,11 +236,17 @@ if __name__ == "__main__":
     if args.maxInferenceFps is None:
         args.maxInferenceFps = args.maxFps
 
-    main(
-        cameraId=args.source,
-        maxFps=args.maxFps,
-        numThreads=args.numThreads,
-        showPreview=args.showPreview,
-        maxInferenceFps=args.maxInferenceFps,
-    )
+    while True:
+        try:
+            main(
+                cameraId=args.source,
+                maxFps=args.maxFps,
+                numThreads=args.numThreads,
+                showPreview=args.showPreview,
+                maxInferenceFps=args.maxInferenceFps,
+            )
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error stopping dashcam: {e}")
+            logging.error(f"Error stopping dashcam: {e}")
     pass
