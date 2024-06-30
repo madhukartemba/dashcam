@@ -57,6 +57,7 @@ class Cleanup:
                 totalSize = self.getTotalSize()
 
             if self.apiData:
+                print('In cleanup idle')
                 self.apiData.status = Status.IDLE.value
                 self.apiData.cleanupPercent = 100
         except Exception as e:
