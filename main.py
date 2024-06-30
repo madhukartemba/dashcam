@@ -140,15 +140,45 @@ def main(maxFps: float, cameraId, numThreads: int, showPreview: bool, maxInferen
     finally:
         try:
             apiServer.data.inferenceData.status = Status.IDLE.value
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error setting status to IDLE: {e}")
+            logging.error(f"Error setting status to IDLE: {e}")
+        
+        try:
             lightDetection.stop()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error stopping light detection: {e}")
+            logging.error(f"Error stopping light detection: {e}")
+
+        try:
             inference.destroyWindow()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error destroying inference window: {e}")
+            logging.error(f"Error destroying inference window: {e}")
+
+        try:
             inference.stop()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error stopping inference: {e}")
+            logging.error(f"Error stopping inference: {e}")
+
+        try:
             dashcam.stop()
+        except Exception as e:
+            utils.playSound("sounds/error.mp3")
+            print(f"Error stopping dashcam: {e}")
+            logging.error(f"Error stopping dashcam: {e}")
+
+        try:
             inputSource.stop()
         except Exception as e:
             utils.playSound("sounds/error.mp3")
-            print(e)
-            logging.error(e)
+            print(f"Error stopping input source: {e}")
+            logging.error(f"Error stopping input source: {e}")
 
     pass
 
