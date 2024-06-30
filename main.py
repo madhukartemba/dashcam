@@ -247,6 +247,6 @@ if __name__ == "__main__":
             )
         except Exception as e:
             utils.playSound("sounds/error.mp3")
-            print(f"Error stopping main function: {e}")
-            logging.error(f"Error stopping main function: {e}")
+            print(f"Fatal exception occured: {e}")
+            logging.error(f"Fatal exception occured: {e}")
     pass
