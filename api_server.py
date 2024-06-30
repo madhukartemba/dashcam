@@ -1,11 +1,9 @@
 import logging
 from enum import Enum
 from datetime import datetime, timedelta
-import time
 from flask import Flask, jsonify, Response, request, send_file
 import threading
 import os
-import cv2
 from dataclasses import dataclass
 from constants import (
     CACHE_FOLDER,
@@ -214,5 +212,3 @@ if __name__ == "__main__":
 
     api = APIServer(activeClientThreshold=timedelta(seconds=10))
     api.start()
-    time.sleep(10)
-    api.shutdown()
