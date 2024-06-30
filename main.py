@@ -254,6 +254,7 @@ if __name__ == "__main__":
             )
         except KeyboardInterrupt:
             print("Closing the main application...")
+            break
         except Exception as e:
             utils.playSound("sounds/error.mp3")
             print(f"Fatal exception occurred: {e}")
