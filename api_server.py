@@ -1,7 +1,7 @@
 import logging
 from enum import Enum
 from datetime import datetime, timedelta
-from time import time
+import time
 from flask import Flask, jsonify, Response, request, send_file
 import threading
 import os
